@@ -17,7 +17,9 @@ LazyData: true
 URL: https://github.com/jrob95/costDeflateR
 BugReports: https://github.com/jrob95/costDeflateR/issues
 Imports: 
+    countrycode,
     httr,
+    imfr,
     jsonlite,
     OECD,
     rsdmx,
