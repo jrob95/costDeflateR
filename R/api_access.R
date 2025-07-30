@@ -9,7 +9,6 @@
 #' @details
 #' Internal function to be used by developers to update internal (i.e.: redundant OECD PPP values) and also by the user when loading the package to ensure up to date values are used in the `deflate()` function. see <a></a> for more information
 #'
-#' @keyword Internal
 #' @usage NULL
 #'
 get_oecd_ppp <- function() {
@@ -36,7 +35,6 @@ get_oecd_ppp <- function() {
 #' @details
 #' Internal function to be used by developers to update internal (i.e.: redundant IMF PPPEX & GDP deflator values) and also by the user when loading the package to ensure up to date values are used in the `deflate()` function. see <a>placeholderlink</a> for more information
 #'
-#' @keyword Internal
 #' @usage NULL
 get_imf <- function(key) {
   data <- as.data.frame(rsdmx::readSDMX(
@@ -58,7 +56,6 @@ get_imf <- function(key) {
 #' @details
 #' Internal function to be used by developers to update internal (i.e.: redundant IMF GDP values) and also by the user when loading the package to ensure up to date values are used in the `deflate()` function. see <a></a> for more information
 #'
-#' @keyword Internal
 #' @usage NULL
 #'
 get_imf_gdpd <- function() {
@@ -75,7 +72,6 @@ get_imf_gdpd <- function() {
 #' @details
 #' Internal function to be used by developers to update internal (i.e.: redundant IMF PPPEX values) and also by the user when loading the package to ensure up to date values are used in the `deflate()` function. see <a></a> for more information
 #'
-#' @keyword Internal
 #' @usage NULL
 get_imf_ppp <- function() {
   get_imf("*.PPPEX.*") |>

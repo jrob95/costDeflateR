@@ -18,12 +18,8 @@ URL: https://github.com/jrob95/costDeflateR
 BugReports: https://github.com/jrob95/costDeflateR/issues
 Imports: 
     countrycode,
-    httr,
-    imfr,
-    jsonlite,
-    OECD,
     rsdmx,
-    XML,
-    xml2
+    dplyr
 Depends: 
     R (>= 3.5)
+RoxygenNote: 7.3.2
