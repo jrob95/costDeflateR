@@ -20,7 +20,12 @@ Imports:
     countrycode,
     rsdmx,
     dplyr,
-    rlang
+    rlang,
+    backports
 Depends: 
     R (>= 3.5)
 RoxygenNote: 7.3.2
+Suggests: 
+    httptest,
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
