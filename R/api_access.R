@@ -21,7 +21,8 @@ get_oecd_ppp <- function() {
 
   data <- rsdmx::readSDMX(url) |>
     as.data.frame(data) |>
-    dplyr::select(COUNTRY = REF_AREA, TIME_PERIOD, PPP = obsValue)
+    dplyr::select(COUNTRY = REF_AREA, TIME_PERIOD, PPP = obsValue) |>
+    dplyr::mutate(TIME_PERIOD = as.numeric(TIME_PERIOD))
 
   return(data)
 }
@@ -42,7 +43,8 @@ get_imf <- function(key) {
     resource = "data",
     flowRef = "IMF.RES,WEO",
     key = key
-  ))
+  )) |>
+    dplyr::mutate(TIME_PERIOD = as.numeric(TIME_PERIOD))
   return(data)
 }
 
