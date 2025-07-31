@@ -17,7 +17,7 @@
 dev_update_data <- function() {
   message("Updating internal data from IMF and OECD...")
 
-  # make it easy to tell if this is internal data or data from update
+  # Function to add a marker row to fallback internal data set to better differentiate between internal and live data
   add_marker_row <- function(df, country = "Marker", time = 1900, value = 0) {
     marker <- data.frame(
       COUNTRY = country,
