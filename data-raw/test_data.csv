@@ -1,0 +1,24 @@
+﻿Reference,Field,year_orig,country_orig,cost_orig
+Prime 2021,Total Costs,2019,Australia,32832
+Prime 2021,Total Costs upper,2019,Australia,42276
+Prime 2021,Total Costs lower,2019,Australia,23376
+Prime 2021,HC Costs,2019,Australia,27579
+Prime 2021,HC Costs upper,2019,Australia,35512
+Prime 2021,HC Costs lower,2019,Australia,19636
+Prime 2021,Fam Costs,2019,Australia,3283
+Prime 2021,Fam Costs upper,2019,Australia,4650
+Prime 2021,Fam Costs lower,2019,Australia,2571
+Goyal 2020,Hospital costs,2016,Australia,30182
+Goyal 2020,Hospital costs  SD,2016,Australia,13998
+Goyal 2020,Parent cost,2016,Australia,2670
+Goyal 2020,Parent cost SD,2016,Australia,992
+Seifer 2019,ARHC BE only,2013,United States,26047
+Seifer 2019,ARHC BE only upper,2013,United States,27353
+Seifer 2019,ARHC BE only lower,2013,United States,24740
+Seifer 2019,ARHC BE + COPD,2013,United States,44212
+Seifer 2019,ARHC BE + COPD upper,2013,United States,45987
+Seifer 2019,ARHC BE + COPD lower,2013,United States,42437
+Seifer 2019,Hosp BE only lower,2013,United States,2488
+Seifer 2019,Hosp BE + COPD lower,2013,United States,8169
+IHPA 21,Major complexity hospital costs,2018,Australia,12950
+IHPA 21,Minor complex hospital costs,2018,Australia,6084

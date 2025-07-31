@@ -37,7 +37,7 @@ dev_update_data <- function() {
       imf_gdpd_key = "*.NGDP_D.*"
     )
   )
-  usethis::use_data(update_meta, overwrite = TRUE)
+  usethis::use_data(internal = TRUE, update_meta, overwrite = TRUE)
 
   invisible(list(
     oecd_ppp = oecd_ppp,
@@ -47,3 +47,7 @@ dev_update_data <- function() {
   ))
 }
 dev_update_data()
+
+test_data <- read.csv("data-raw/test_data.csv")
+usethis::use_data(test_data, overwrite = TRUE)
+
