@@ -17,10 +17,24 @@
 dev_update_data <- function() {
   message("Updating internal data from IMF and OECD...")
 
+  # make it easy to tell if this is internal data or data from update
+  add_marker_row <- function(df, country = "Marker", time = 1900, value = 0) {
+    marker <- data.frame(
+      COUNTRY = country,
+      TIME_PERIOD = time,
+      rep(value, ncol(df) - 2),
+      check.names = FALSE
+    )
+    colnames(marker) <- colnames(df)
+    rbind(marker, df)
+  }
+
+
+
   # 1. Fetch data
-  oecd_ppp <- get_oecd_ppp()
-  imf_ppp  <- get_imf_ppp()
-  imf_gdpd <- get_imf_gdpd()
+  oecd_ppp <- get_oecd_ppp() |> add_marker_row()
+  imf_ppp  <- get_imf_ppp() |> add_marker_row()
+  imf_gdpd <- get_imf_gdpd() |> add_marker_row()
 
   # 2. Save datasets
   usethis::use_data(oecd_ppp, overwrite = TRUE)
