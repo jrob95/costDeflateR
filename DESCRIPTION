@@ -1,16 +1,26 @@
 Package: costDeflateR
 Type: Package
-Title: What the Package Does (Title Case)
+Title: Convert costs between times and currencies
 Version: 0.1.0
 Authors@R: c(
-    person(
-      "Jane", "Doe",
-      email = "jane@example.com",
-      role = c("aut", "cre")
-    )
+    person(given = "Jack",
+           family = "Roberts", 
+           email = "jack.roberts@connect.qut.edu.au",
+           role = c("aut", "cre"),
+           comment = c(ORCID = "0000-0003-3519-4725")),
+    person(given = "Ian",
+           family = "Schemilt", 
+           email = "",
+           role = c("aut"),
+           comment = c(ORCID = ""))
   )
-Description: More about what it does (maybe more than one line).
-    Continuation lines should be indented.
+Maintainer: The package maintainer <jack.roberts@connect.qut.edu.au>
+Description: This package takes data from the International Monetary Fund's world
+  economic output and the Organisation for Economic Co-operation and Development,
+  namely, purchasing power parity exchange rates and gross domestic product
+  deflator index values. It uses these values to transform cost values between
+  jurisdictions and times, essentially allowing users to adjust between currencies
+  and inflation over time. 
 License: LGPL (>= 3)
 Encoding: UTF-8
 LazyData: true
@@ -21,7 +31,8 @@ Imports:
     rsdmx,
     dplyr,
     rlang,
-    backports
+    backports,
+    tibble
 Depends: 
     R (>= 3.5)
 RoxygenNote: 7.3.2
