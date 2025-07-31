@@ -23,3 +23,5 @@ rlang::on_load({
     }
   )
 })
+
+utils::globalVariables(".data")
