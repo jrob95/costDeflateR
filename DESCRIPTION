@@ -11,7 +11,7 @@ Authors@R: c(
   )
 Description: More about what it does (maybe more than one line).
     Continuation lines should be indented.
-License: What license is it under?
+License: LGPL (>= 3)
 Encoding: UTF-8
 LazyData: true
 URL: https://github.com/jrob95/costDeflateR
@@ -19,7 +19,8 @@ BugReports: https://github.com/jrob95/costDeflateR/issues
 Imports: 
     countrycode,
     rsdmx,
-    dplyr
+    dplyr,
+    rlang
 Depends: 
     R (>= 3.5)
 RoxygenNote: 7.3.2
