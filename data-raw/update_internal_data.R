@@ -15,6 +15,7 @@
 #' @return Invisibly returns a list of updated datasets
 #' @noRd
 dev_update_data <- function() {
+  devtools::load_all()
   message("Updating internal data from IMF and OECD...")
 
   # Function to add a marker row to fallback internal data set to better differentiate between internal and live data
@@ -62,6 +63,6 @@ dev_update_data <- function() {
 }
 dev_update_data()
 
-test_data <- read.csv("data-raw/test_data.csv")
-usethis::use_data(test_data, overwrite = TRUE)
+rob_sr <- read.csv("data-raw/rob_sr.csv")
+usethis::use_data(rob_sr, overwrite = TRUE)
 
