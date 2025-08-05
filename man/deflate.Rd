@@ -12,26 +12,34 @@ deflate(
   year_target,
   country_target,
   cost_target = "cost_target",
+  pppex_src = "IMF",
   rename_countries = FALSE,
-  use_live_data = TRUE
+  use_live_data = TRUE,
+  force_live_data = FALSE
 )
 }
 \arguments{
 \item{input_data}{A `data.frame`.}
 
-\item{cost_base}{A numeric or column name representing the base cost.}
+\item{cost_base}{A `numeric` or `colname` representing the base cost.}
 
-\item{year_base}{A numeric or column name representing the base year.}
+\item{year_base}{A `numeric` or `colname` representing the base year.}
 
-\item{country_base}{A `character` the name of a country OR the column name representing the base country.}
+\item{country_base}{A `character` the name of a country OR the `colname` representing the base country.}
 
-\item{year_target}{A numeric or column name representing the target year.}
+\item{year_target}{A `numeric` or `colname` representing the target year.}
 
-\item{country_target}{A character or column name representing the target country.}
+\item{country_target}{A `character` or `colname` representing the target country.}
 
-\item{cost_target}{String, what should the name be for the new column with deflated cost values.}
+\item{cost_target}{A `character`, what should the name be for the new column with deflated cost values.}
 
-\item{rename_countries}{A Logical
+\item{pppex_src}{A `character`, which dataset should PPP values come from? IMF or OECD?}
+
+\item{rename_countries}{A `logical`, ask the function to clean up country names if not in `iso3c` format.}
+
+\item{use_live_data}{Makes call to `update_internal_data()`, if current IMF or OECD are more than a week old then make an API call to replace them., default = `TRUE`}
+
+\item{force_live_data}{Makes call to `update_internal_data()` regardless of age of data currently stored. Use only if you know IMF WEO or OECD data has been updated since you last ran `deflate`, default = `FALSE`
 Default to \code{"cost_target"}}
 }
 \value{

@@ -4,7 +4,7 @@
 \alias{update_internal_data}
 \title{Prepare internal data in temporary directory}
 \usage{
-update_internal_data()
+update_internal_data(dl_oecd = TRUE, dl_imf = TRUE, dl_imfgdpd = TRUE)
 }
 \value{
 Path to the temporary data directory
