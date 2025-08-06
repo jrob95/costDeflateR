@@ -25,4 +25,7 @@
 # })
 #
 
-utils::globalVariables(".data")
+utils::globalVariables(c(".data", ".x", "updated_at", "COUNTRY", "TIME_PERIOD", "PPPEX", "PPP", "NGDP_D",
+                         "country", "year", "field_name", "value_gdpd", "value_pppex",
+                         "deflate_target", "PPP_target", "deflate_orig", "PPP_orig", "gdpd_vals",
+                         "update_internal_data", "country.name.en", "iso3c"))
