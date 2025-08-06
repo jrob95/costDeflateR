@@ -6,18 +6,24 @@
 \usage{
 cond_update_internal_data(
   force = FALSE,
-  dl_oecd = TRUE,
-  dl_imf = TRUE,
+  dl_oecdppp = TRUE,
+  dl_imfppp = TRUE,
   dl_imfgdpd = TRUE
 )
 }
 \arguments{
-\item{force}{Logical. If TRUE, forces the update regardless of data age. Default is FALSE.}
+\item{force}{Logical. If TRUE, forces the update regardless of data age.}
+
+\item{dl_oecdppp}{Logical. Whether to check/update OECD PPP data.}
+
+\item{dl_imfppp}{Logical. Whether to check/update IMF PPP data.}
+
+\item{dl_imfgdpd}{Logical. Whether to check/update IMF GDP deflator data.}
 }
 \value{
 Path to the temporary data directory
 }
 \description{
-Checks the age of the temporary data directory and updates it if older than 7 days,
-or if `force` is set to TRUE.
+Checks the age of each dataset in the temporary directory and updates only those
+that are missing or older than 7 days, or if `force` is set to TRUE.
 }
