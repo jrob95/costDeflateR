@@ -5,15 +5,15 @@
 \title{Deflate currency values}
 \usage{
 deflate(
-  input_data = .x,
+  input_data,
   cost_base,
   year_base,
   country_base,
   year_target,
-  country_target,
+  country_target = "USA",
   cost_target = "cost_target",
   pppex_src = "IMF",
-  rename_countries = FALSE,
+  rename_countries = TRUE,
   use_live_data = TRUE,
   force_live_data = FALSE
 )
@@ -37,9 +37,9 @@ deflate(
 
 \item{rename_countries}{A `logical`, ask the function to clean up country names if not in `iso3c` format.}
 
-\item{use_live_data}{Makes call to `update_internal_data()`, if current IMF or OECD are more than a week old then make an API call to replace them., default = `TRUE`}
+\item{use_live_data}{A `logical`. Makes call to `update_internal_data()`, if current IMF or OECD are more than a week old then make an API call to replace them., default = `TRUE`}
 
-\item{force_live_data}{Makes call to `update_internal_data()` regardless of age of data currently stored. Use only if you know IMF WEO or OECD data has been updated since you last ran `deflate`, default = `FALSE`
+\item{force_live_data}{A `logical`. Makes call to `update_internal_data()` regardless of age of data currently stored. Use only if you know IMF WEO or OECD data has been updated since you last ran `deflate`, default = `FALSE`
 Default to \code{"cost_target"}}
 }
 \value{
@@ -87,7 +87,8 @@ deflated_data <- deflate(
   year_base = "2010",
   country_base = "Australia",
   year_target = "2020",
-  country_target = "United States"
+  country_target = "United States",
+  rename_countries = TRUE
 )
 
 }

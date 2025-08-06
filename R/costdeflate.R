@@ -61,49 +61,14 @@
 #' )
 #'
 #' @export
-deflate <- function(input_data = .x, cost_base, year_base, country_base, year_target, country_target, cost_target = "cost_target", pppex_src = "IMF", rename_countries = FALSE, use_live_data = TRUE, force_live_data = FALSE) {
+deflate <- function(input_data, cost_base, year_base, country_base, year_target, country_target = "USA", cost_target = "cost_target", pppex_src = "IMF", rename_countries = TRUE, use_live_data = TRUE, force_live_data = FALSE) {
   tryCatch(
     {
       if (!pppex_src %in% c("IMF", "OECD")) {
-        stop(paste0("`pppex_src` must be either \"IMF\" or \"OECD\"\"", pppex_src, "\" not allowed. Check capitals/ case."))
+        stop(sprintf("`pppex_src` must be either \"IMF\" or \"OECD\". '%s' is not allowed. Check capitalization.", pppex_src))
       }
 
-      # deal with internal/ live data.
-      dl_imfppp <- dl_oecdppp <- FALSE
-
-      if (pppex_src == "IMF") dl_imfppp <- TRUE
-      if (pppex_src == "OECD") dl_oecdppp <- TRUE
-      # get live data, store temp.
-      if (use_live_data) {
-        message("Attempting to use live data from IMF/ OECD")
-        cond_update_internal_data(force_live_data, dl_imfppp, dl_oecdppp)
-        dir <- get_temp_data_dir()
-        oecd_ppp <- readRDS(file.path(dir, "oecd_ppp.rds"))
-        imf_ppp <- readRDS(file.path(dir, "imf_ppp.rds"))
-        imf_gdpd <- readRDS(file.path(dir, "imf_gdpd.rds"))
-      } else {
-        message(paste0("Using internal data. Last upated", update_meta[updated_at]))
-      }
-
-      # point data to correct dataset.
-      if (pppex_src == "IMF") {
-        ppp_vals <- imf_ppp |>
-          dplyr::select(country = COUNTRY, year = TIME_PERIOD, value = PPPEX)
-      }
-      if (pppex_src == "OECD") {
-        ppp_vals <- oecd_ppp |>
-          dplyr::select(country = COUNTRY, year = TIME_PERIOD, value = PPP)
-      }
-
-      if (TRUE) {
-        gdpd_vals <- imf_gdpd |>
-          dplyr::select(country = COUNTRY, year = TIME_PERIOD, value = NGDP_D)
-      }
-
-      # country combs for later
-      tbl <- ppp_vals |>
-        dplyr::inner_join(gdpd_vals, dplyr::join_by(country, year), suffix = c("_pppex", "_gdpd"))
-
+      tbl <- get_data(pppex_src, use_live_data, force_live_data)
       # check parameters####
       # handler to throw errors if desired object is not class
       if (!is.data.frame(input_data) & !tibble::is_tibble(input_data)) {
@@ -133,23 +98,17 @@ deflate <- function(input_data = .x, cost_base, year_base, country_base, year_ta
 
 
       # Function to check if fields are numeric or can be numeric
-      can_be_numeric <- function(x) {
-        if (is.numeric(x)) {
-          return(x) # If x is already numeric, return it directly
-        }
 
-        all_numbers <- all(grepl("^-?\\d*\\.?\\d+$", x)) # Check if all elements match a numeric pattern
-        if (all_numbers) {
-          num <- as.numeric(x) # Convert to numeric
-          return(num)
-        } else {
-          stop(sprintf("Field '%s' must be numeric or contain only numeric characters.", field_name))
-        }
+      can_be_numeric <- function(x, field_name = "unknown") {
+        if (is.numeric(x)) return(x)
+        if (all(grepl("^-?\\d*\\.?\\d+$", x))) return(as.numeric(x))
+        stop(sprintf("Field '%s' must be numeric or contain only numeric characters.", field_name))
       }
 
-      input_data[, cost_base] <- can_be_numeric(input_data[[cost_base]])
-      input_data[, year_base] <- can_be_numeric(input_data[[year_base]])
-      input_data[, year_target] <- can_be_numeric(input_data[[year_target]])
+
+      input_data[, cost_base] <- can_be_numeric(input_data[[cost_base]], cost_base)
+      input_data[, year_base] <- can_be_numeric(input_data[[year_base]], cost_base)
+      input_data[, year_target] <- can_be_numeric(input_data[[year_target]], cost_base)
 
 
       # Check if country_base is included in gdpd_vals or is a column in data frame
@@ -169,7 +128,7 @@ deflate <- function(input_data = .x, cost_base, year_base, country_base, year_ta
         # check whether the combinations are in the reference table
         for (comb in combs) {
           if (!(comb %in% ref_comb)) {
-            # stop(paste0("\"", comb, "\" does not exist in the reference table. Please use `delfator_country_year_combs()` to check available combinations"))
+            # stop(paste0("\"", comb, "\" does not exist in the reference table. Please use `deflator_country_year_combs()` to check available combinations"))
             stop(paste0("\"", comb, "\" does not exist in the reference table. Please check available combinations"))
           }
         }
@@ -179,78 +138,68 @@ deflate <- function(input_data = .x, cost_base, year_base, country_base, year_ta
       check_year_country_combination(input_data, year_target, "country_target2", tbl)
 
       # deflate the cleaned input data
-      output_data <- input_data %>%
-        dplyr::left_join(tbl, dplyr::join_by("country_base2" == "country", !!year_base == "year")) %>%
+      output_data <- input_data |>
+        dplyr::left_join(tbl, dplyr::join_by("country_base2" == "country", !!year_base == "year")) |>
         dplyr::mutate(
           deflate_orig = as.numeric(value_gdpd),
           PPP_orig = as.numeric(value_pppex)
-        ) %>%
-        dplyr::select(-value_gdpd, -value_pppex) %>%
-        dplyr::left_join(tbl, dplyr::join_by("country_target2" == "country", !!year_target == "year")) %>%
+        ) |>
+        dplyr::select(-value_gdpd, -value_pppex) |>
+        dplyr::left_join(tbl, dplyr::join_by("country_target2" == "country", !!year_target == "year")) |>
         dplyr::mutate(
           deflate_target = as.numeric(value_gdpd),
           PPP_target = as.numeric(value_pppex)
-        ) %>%
-        dplyr::select(-value_gdpd, -value_pppex) %>%
-        dplyr::mutate(cost_target = (deflate_target * PPP_target) / (deflate_orig * PPP_orig) * .data[[cost_base]]) %>%
+        ) |>
+        dplyr::select(-value_gdpd, -value_pppex) |>
+        dplyr::mutate(cost_target = (deflate_target * PPP_target) / (deflate_orig * PPP_orig) * .data[[cost_base]]) |>
         dplyr::select(-c("PPP_orig", "deflate_orig", "PPP_target", "deflate_target", "country_base2", "country_target2"))
       return(output_data)
     },
     error = function(e) {
-      message("Error: ", e$message)
+      stop("deflate() failed: ", e$message)
     }
+
   )
 }
 
-#' Deflator country list
+#' Country code list
 #'
-#' `deflator_country_list` returns a returns a list of available countries in the WEO data set.
+#' `country_code_list` returns a returns a list of available countries in the WEO data set.
 #'
-#' This is a helper function for checking which countries exist in the reference data
+#' This is a helper function for checking allowable country mappings in the `countrycode` package between English and iso3c standards.
 #'
-#' @return Returns a \code{chr}.
+#' @return Returns a \code{tibble}.
 #' @export
-deflator_country_list <- function() {
-  return(unique(gdpd_vals$Country))
-}
+country_code_list <- function(){
+  countrycode::codelist |> dplyr::select(country.name.en, iso3c)
+  }
 
-#' Deflate country/ year combo list
+#' IMF/ OECD data country/ year combo list
 #'
-#' `delfator_country_year_combs` returns a returns a list of available countriy/ year combinations in the WEO data set.
+#' `delfator_country_year_combs` returns a returns a list of available countriy/ year combinations in the WEO and/ or OECD PPPEX and defaltor data sets.
 #'
-#' This is a helper function for checking which countr/ year combinations  exist in the reference data
+#' This is a helper function for checking which country/ year combinations  exist in the reference data
 #'
-#' @return Returns a \code{chr}.
-delfator_country_year_combs <- function() {
-  return(paste0(gdpd_vals$Country, " - ", as.character(gdpd_vals$year)))
-}
+#' @param pppex_src A `character`, which dataset should PPP values come from? IMF or OECD?
+#' @param use_live_data A `logical`. Makes call to `update_internal_data()`, if current IMF or OECD are more than a week old then make an API call to replace them., default = `TRUE`
+#' @param force_live_data A `logical`. Makes call to `update_internal_data()` regardless of age of data currently stored. Use only if you know IMF WEO or OECD data has been updated since you last ran
+#' @return Returns a \code{tibble}.
+#' @export
+delfator_country_year_combs <- function(pppex_src = "IMF", use_live_data = TRUE, force_live_data = FALSE) {
+  tbl <- get_data(pppex_src, use_live_data, force_live_data) |>
+    dplyr::select(country, year) |>
+    dplyr::left_join(country_code_list(), dplyr::join_by(country == iso3c))
+  return(tbl)
+  }
 
-use_live_data <- function() {
-  tryCatch(
-    {
-      update_internal_data()
-      packageStartupMessage(
-        "Using latest IMF & OECD datasets - updated ",
-        Sys.time()
-      )
-    },
-    error = function(e) {
-      last <- tryCatch(
-        get("update_meta",
-          envir = asNamespace("costDeflateR")
-        )[["updated_at"]],
-        error = function(e) "unknown"
-      )
-      warning(
-        "Failed to prepare temporary data on load: ",
-        conditionMessage(e),
-        "\n Reverting to internal data. Last updated: ",
-        last
-      )
-    }
-  )
-}
-
+#' Clean country names to match between IMF/ OECD ISO style country names and user input.
+#'
+#' `country_cleaner` recode country names form english to ISO3c format
+#'
+#' This is a helper function for clean up country names.
+#'
+#' @param data A `character`
 country_cleaner <- function(data) {
-  countrycode::countryname(data, destination = "iso3c")
+  countrycode::countrycode(data, origin = "country.name", destination = "iso3c")
 }
+
