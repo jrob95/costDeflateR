@@ -11,6 +11,7 @@ coverage](https://codecov.io/gh/jrob95/costDeflateR/graph/badge.svg)](https://ap
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 [![CRAN
 status](https://www.r-pkg.org/badges/version/costDeflateR)](https://CRAN.R-project.org/package=costDeflateR)
+[![R-CMD-check](https://github.com/jrob95/costDeflateR/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/jrob95/costDeflateR/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 **costDeflateR** is an R package designed to help you deflate currency
