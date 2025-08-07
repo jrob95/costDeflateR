@@ -78,6 +78,8 @@ deflated_data <- deflate(
   country_target = "United States",
   rename_countries = TRUE
 )
+
+print(deflated_data)
 ```
 
 ## Helper Functions
