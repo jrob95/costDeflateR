@@ -4,10 +4,10 @@
 #' Get OECD PPP values
 #'
 #' @description
-#' Get Purchasing power parity (PPP) values from OECD data sets
+#' Get Purchasing power parity (PPP) values from OECD data sets.
 #'
 #' @details
-#' Internal function to be used by developers to update internal (i.e.: redundant OECD PPP values) and also by the user when loading the package to ensure up to date values are used in the `deflate()` function. see <a></a> for more information
+#' Internal function to be used by developers to update internal (i.e.: redundant OECD PPP values) and also by the user when loading the package to ensure up to date values are used in the `deflate()` function. see <a href = "https://www.oecd.org/en/data/indicators/purchasing-power-parities-ppp.html"> OECD website</a> for more information.
 #'
 #' @usage NULL
 #'
@@ -44,7 +44,7 @@ get_oecd_ppp <- function() {
 #' Get helper function for accessing IMF data through SMDX API.
 #'
 #' @details
-#' Internal function to be used by developers to update internal (i.e.: redundant IMF PPPEX & GDP deflator values) and also by the user when loading the package to ensure up to date values are used in the `deflate()` function. see <a>placeholderlink</a> for more information
+#' Internal function to be used by developers to update internal (i.e.: redundant IMF PPPEX & GDP deflator values) and also by the user when loading the package to ensure up to date values are used in the `deflate()` function. see <a href = "https://www.imf.org/en/Publications/SPROLLS/world-economic-outlook-databases#sort=%40imfdate%20descending">IMF WEO website</a> for more information.
 #'
 #' @usage NULL
 get_imf <- function(key) {
@@ -78,7 +78,7 @@ get_imf <- function(key) {
 #' Get gross domestic product, deflator (GDP_D) values from IMF data sets
 #'
 #' @details
-#' Internal function to be used by developers to update internal (i.e.: redundant IMF GDP values) and also by the user when loading the package to ensure up to date values are used in the `deflate()` function. see <a></a> for more information
+#' Internal function to be used by developers to update internal (i.e.: redundant IMF GDP values) and also by the user when loading the package to ensure up to date values are used in the `deflate()` function. see <a href = "https://www.imf.org/en/Publications/SPROLLS/world-economic-outlook-databases#sort=%40imfdate%20descending">IMF WEO website</a> for more information.
 #'
 #' @usage NULL
 #'
@@ -94,7 +94,7 @@ get_imf_gdpd <- function() {
 #' Get Implied PPP conversion rate (PPPEX) values from IMF data sets
 #'
 #' @details
-#' Internal function to be used by developers to update internal (i.e.: redundant IMF PPPEX values) and also by the user when loading the package to ensure up to date values are used in the `deflate()` function. see <a></a> for more information
+#' Internal function to be used by developers to update internal (i.e.: redundant IMF PPPEX values) and also by the user when loading the package to ensure up to date values are used in the `deflate()` function. see <a href = "https://www.imf.org/en/Publications/SPROLLS/world-economic-outlook-databases#sort=%40imfdate%20descending">IMF WEO website</a> for more information.
 #'
 #' @usage NULL
 get_imf_ppp <- function() {

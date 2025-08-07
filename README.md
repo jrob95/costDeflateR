@@ -94,7 +94,9 @@ delfator_country_year_combs(pppex_src = "IMF")
 ## Data Sources
 
 - **IMF World Economic Outlook (WEO)**
+  <a href = "https://www.imf.org/en/Publications/SPROLLS/world-economic-outlook-databases#sort=%40imfdate%20descending">Link</a>
 - **OECD PPP Exchange Rates**
+  <a href = "https://www.oecd.org/en/data/indicators/purchasing-power-parities-ppp.html">Link</a>
 
 ## Contributing
 
@@ -103,4 +105,4 @@ welcome!
 
 ## License
 
-LGPL=3.0 © Jack Roberts and Ian Shemilt
+LGPL-3.0 © Jack Roberts and Ian Shemilt
