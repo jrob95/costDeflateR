@@ -20,14 +20,22 @@ get_oecd_ppp <- function() {
   )
   cat("[rsdmx][INFO] Fetching \'https://sdmx.oecd.org/public/rest/data/OECD.SDD.NAD,DSD_NAMAIN10@DF_TABLE4,1.0/A.AUS+AUT+BEL+CAN+CHL+COL+CRI+CZE+DNK+EST+FIN+FRA+DEU+GRC+HUN+ISL+IRL+ISR+ITA+JPN+KOR+LVA+LTU+LUX+MEX+NLD+NZL+NOR+POL+PRT+SVK+SVN+ESP+SWE+CHE+TUR+GBR+USA...PPP_B1GQ.......?dimensionAtObservation=AllDimensions\'")
 
-  data <- rsdmx::readSDMX(url) |>
-    as.data.frame(data) |>
-    dplyr::select(COUNTRY = .data$REF_AREA, .data$TIME_PERIOD, PPP = .data$obsValue) |>
-    dplyr::mutate(TIME_PERIOD = as.numeric(.data$TIME_PERIOD))
+  tryCatch(
+    {
+      data <- rsdmx::readSDMX(url) |>
+        as.data.frame(data) |>
+        dplyr::select(COUNTRY = REF_AREA, TIME_PERIOD, PPP = obsValue) |>
+        dplyr::mutate(TIME_PERIOD = as.numeric(TIME_PERIOD))
 
-
-  return(data)
+      return(data)
+    },
+    error = function(e) {
+      warning("Failed to fetch OECD PPP data: ", conditionMessage(e))
+      return(NULL)
+    }
+  )
 }
+
 
 #----- IMF data
 #' Get IMF data
@@ -40,15 +48,27 @@ get_oecd_ppp <- function() {
 #'
 #' @usage NULL
 get_imf <- function(key) {
-  data <- as.data.frame(rsdmx::readSDMX(
-    providerId = "IMF_DATA",
-    resource = "data",
-    flowRef = "IMF.RES,WEO",
-    key = key
-  )) |>
-    dplyr::mutate(TIME_PERIOD = as.numeric(.data$TIME_PERIOD))
-  return(data)
+  tryCatch(
+    {
+      data <- as.data.frame(rsdmx::readSDMX(
+        providerId = "IMF_DATA",
+        resource = "data",
+        flowRef = "IMF.RES,WEO",
+        key = key
+      )) |>
+        dplyr::mutate(
+          TIME_PERIOD = as.numeric(TIME_PERIOD),
+          OBS_VALUE = as.numeric(OBS_VALUE)
+        )
+      return(data)
+    },
+    error = function(e) {
+      warning("Failed to fetch IMF data: ", conditionMessage(e))
+      return(NULL)
+    }
+  )
 }
+
 
 
 #----- IMF gdp_d
@@ -64,7 +84,7 @@ get_imf <- function(key) {
 #'
 get_imf_gdpd <- function() {
   get_imf("*.NGDP_D.*") |>
-    dplyr::select(.data$COUNTRY, .data$TIME_PERIOD, NGDP_D = .data$OBS_VALUE)
+    dplyr::select(COUNTRY, TIME_PERIOD, NGDP_D = OBS_VALUE)
 }
 
 #----- IMF ppp
@@ -79,9 +99,5 @@ get_imf_gdpd <- function() {
 #' @usage NULL
 get_imf_ppp <- function() {
   get_imf("*.PPPEX.*") |>
-    dplyr::select(.data$COUNTRY, .data$TIME_PERIOD, PPPEX = .data$OBS_VALUE)
+    dplyr::select(COUNTRY, TIME_PERIOD, PPPEX = OBS_VALUE)
 }
-
-
-
-
