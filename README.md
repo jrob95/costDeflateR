@@ -7,49 +7,100 @@
 
 [![Codecov test
 coverage](https://codecov.io/gh/jrob95/costDeflateR/graph/badge.svg)](https://app.codecov.io/gh/jrob95/costDeflateR)
+[![Lifecycle:
+experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+[![CRAN
+status](https://www.r-pkg.org/badges/version/costDeflateR)](https://CRAN.R-project.org/package=costDeflateR)
 <!-- badges: end -->
 
-The goal of costDeflateR is to …
+**costDeflateR** is an R package designed to help you deflate currency
+values across countries and years using GDP deflators and PPP exchange
+rates from IMF and OECD datasets. It provides tools for adjusting
+monetary values to a common base, ensuring comparability across time and
+geography.
 
 ## Installation
 
-You can install the development version of costDeflateR from
-[GitHub](https://github.com/) with:
-
 ``` r
-# install.packages("pak")
-pak::pak("jrob95/costDeflateR")
+# Install from GitHub (if using devtools or remotes)
+# remotes::install_github("jrob95/costDeflateR")
 ```
 
-## Example
+## Features
 
-This is a basic example which shows you how to solve a common problem:
+- `deflate()`: Main function to deflate currency values using GDP
+  deflators and PPP exchange rates. You can use live IMF/ OECD data
+  using the `use_live_data = TRUE`
+- `delfator_country_year_combs()`: Lists available country-year
+  combinations in the reference datasets.
+
+## Example Usage
+
+### Deflating Currency Values
 
 ``` r
-library(costDeflateR)
-## basic example code
+library(DeflateR)
+
+# Sample data
+data <- data.frame(
+  country_base = c("USA", "Germany"),
+  year_base = c(2010, 2015),
+  country_target = c("France", "Italy"),
+  year_target = c(2015, 2020),
+  cost_base = c(100, 200)
+)
+
+# Deflate currency values
+deflated_data <- deflate(
+  input_data = data,
+  cost_base = "cost_base",
+  year_base = "year_base",
+  country_base = "country_base",
+  year_target = "year_target",
+  country_target = "country_target"
+)
+
+print(deflated_data)
 ```
 
-What is special about using `README.Rmd` instead of just `README.md`?
-You can include R chunks like so:
+### Using Constant Values
 
 ``` r
-summary(cars)
-#>      speed           dist       
-#>  Min.   : 4.0   Min.   :  2.00  
-#>  1st Qu.:12.0   1st Qu.: 26.00  
-#>  Median :15.0   Median : 36.00  
-#>  Mean   :15.4   Mean   : 42.98  
-#>  3rd Qu.:19.0   3rd Qu.: 56.00  
-#>  Max.   :25.0   Max.   :120.00
+data <- data.frame(cost_base = c(100, 200))
+
+deflated_data <- deflate(
+  input_data = data,
+  cost_base = "cost_base",
+  year_base = "2010",
+  country_base = "Australia",
+  year_target = "2020",
+  country_target = "United States",
+  rename_countries = TRUE
+)
 ```
 
-You’ll still need to render `README.Rmd` regularly, to keep `README.md`
-up-to-date. `devtools::build_readme()` is handy for this.
+## Helper Functions
 
-You can also embed plots, for example:
+### Available Country-Year Combinations
 
-<img src="man/figures/README-pressure-1.png" width="100%" />
+You might not know which year/ country combinations have data present in
+your PPPEX and NGDP_D combination choice.
+`delfator_country_year_combs()` lets you check.
 
-In that case, don’t forget to commit and push the resulting figure
-files, so they display on GitHub and CRAN.
+``` r
+delfator_country_year_combs(pppex_src = "IMF")
+```
+
+## Data Sources
+
+- **IMF World Economic Outlook (WEO)**
+- **OECD PPP Exchange Rates**
+
+## Contributing
+
+Feel free to open issues or submit pull requests. Contributions are
+welcome!
+
+## License
+
+LGPL=3.0 © Jack Roberts and Ian Shemilt
