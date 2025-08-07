@@ -7,7 +7,14 @@
 #' @return Returns a \code{tibble}.
 #' @export
 country_code_list <- function() {
-  countrycode::codelist |> dplyr::select(country.name.en, iso3c)
+  tryCatch(
+    {
+      countrycode::codelist |> dplyr::select(country.name.en, iso3c)
+    },
+    error = function(e) {
+      stop("country_code_list() failed: ", e$message)
+    }
+  )
 }
 
 #' IMF/ OECD data country/ year combo list
@@ -22,10 +29,19 @@ country_code_list <- function() {
 #' @return Returns a \code{tibble}.
 #' @export
 delfator_country_year_combs <- function(pppex_src = "IMF", use_live_data = TRUE, force_live_data = FALSE) {
-  tbl <- get_data(pppex_src, use_live_data, force_live_data) |>
-    dplyr::select(country, year) |>
-    dplyr::left_join(country_code_list(), dplyr::join_by(country == iso3c))
-  return(tbl)
+  tryCatch(
+    {
+      if (!pppex_src %in% c("IMF", "OECD")) stop("pppex_src must be either \"IMF\" or \"OECD\"")
+
+      tbl <- get_data(pppex_src, use_live_data, force_live_data) |>
+        dplyr::select(country, year) |>
+        dplyr::left_join(country_code_list(), dplyr::join_by(country == iso3c))
+      return(tbl)
+    },
+    error = function(e) {
+      stop("deflator_country_year_combs() failed: ", e$message)
+    }
+  )
 }
 
 #' Clean country names to match between IMF/ OECD ISO style country names and user input.
@@ -36,5 +52,12 @@ delfator_country_year_combs <- function(pppex_src = "IMF", use_live_data = TRUE,
 #'
 #' @param data A `character`
 country_cleaner <- function(data) {
-  countrycode::countrycode(data, origin = "country.name", destination = "iso3c")
+  tryCatch(
+    {
+      countrycode::countrycode(data, origin = "country.name", destination = "iso3c")
+    },
+    error = function(e) {
+      stop("country_cleaner() failed: ", e$message)
+    }
+  )
 }
