@@ -57,9 +57,10 @@ cond_update_internal_data <- function(force = FALSE, dl_oecdppp = TRUE, dl_imfpp
 #'
 #' Downloads OECD and IMF datasets and stores them in a temporary directory.
 #' Falls back to internal data if download fails.
-#' @param fetch_fn function to use to fetch data from api
-#' @param fallback_name name of internal dataset to use as fallback
+#' @param fetch_fn function to use to fetch data from api.
+#' @param fallback_name name of internal dataset to use as fallback.
 #' @param filename name of file in temp folder.
+#' @param dir character string contain temp directory path.
 #'
 #' @return Path to the temporary data directory
 safe_fetch <- function(fetch_fn, fallback_name, filename, dir) {
@@ -108,13 +109,23 @@ get_data <- function(pppex_src, use_live_data, force_live_data) {
     cond_update_internal_data(force_live_data, dl_oecdppp, dl_imfppp)
     dir <- get_temp_data_dir()
     if (dl_oecdppp == TRUE) {
-    oecd_ppp <- readRDS(file.path(dir, "oecd_ppp.rds"))}
+      oecd_ppp <- readRDS(file.path(dir, "oecd_ppp.rds"))
+    }
     if (dl_imfppp == TRUE) {
-    imf_ppp <- readRDS(file.path(dir, "imf_ppp.rds"))}
+      imf_ppp <- readRDS(file.path(dir, "imf_ppp.rds"))
+    }
     if (TRUE) {
-    imf_gdpd <- readRDS(file.path(dir, "imf_gdpd.rds"))}
+      imf_gdpd <- readRDS(file.path(dir, "imf_gdpd.rds"))
+    }
   } else {
-    message(paste0("Using internal data. Last upated", update_meta[updated_at]))
+    # else revert to old (can already call from internal data)
+    message(paste0(
+      "Using internal data. Last updated: ",
+      format(
+        as.POSIXct(as.numeric(update_meta["updated_at"]), origin = "1970-01-01", tz = "UTC"),
+        "%Y-%m-%d %H:%M:%S %Z"
+      )
+    ))
   }
 
   # point data to correct dataset.
