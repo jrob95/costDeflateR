@@ -39,7 +39,7 @@ geography.
 ### Deflating Currency Values
 
 ``` r
-library(DeflateR)
+library(costDeflateR)
 
 # Sample data
 data <- data.frame(
