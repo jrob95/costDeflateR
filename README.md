@@ -5,6 +5,8 @@
 
 <!-- badges: start -->
 
+[![Codecov test
+coverage](https://codecov.io/gh/jrob95/costDeflateR/graph/badge.svg)](https://app.codecov.io/gh/jrob95/costDeflateR)
 <!-- badges: end -->
 
 The goal of costDeflateR is to …
@@ -25,11 +27,6 @@ This is a basic example which shows you how to solve a common problem:
 
 ``` r
 library(costDeflateR)
-#> Too Many Requests (RFC 6585) (HTTP 429).
-#> Warning in value[[3L]](cond): Failed to fetch oecd_ppp. Using internal
-#> fallback.
-#> Warning in value[[3L]](cond): Failed to prepare temporary data on load: object 'oecd_ppp' not found
-#>  Reverting to internal data. Last updated: unknown
 ## basic example code
 ```
 

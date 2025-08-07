@@ -36,5 +36,6 @@ Depends:
 RoxygenNote: 7.3.2
 Suggests: 
     httptest,
-    testthat (>= 3.0.0)
+    testthat (>= 3.0.0),
+    fs
 Config/testthat/edition: 3

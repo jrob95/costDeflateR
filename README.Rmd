@@ -16,6 +16,7 @@ knitr::opts_chunk$set(
 # costDeflateR
 
 <!-- badges: start -->
+[![Codecov test coverage](https://codecov.io/gh/jrob95/costDeflateR/graph/badge.svg)](https://app.codecov.io/gh/jrob95/costDeflateR)
 <!-- badges: end -->
 
 The goal of costDeflateR is to ...
