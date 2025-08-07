@@ -18,7 +18,7 @@ delfator_country_year_combs(
 \item{force_live_data}{A `logical`. Makes call to `update_internal_data()` regardless of age of data currently stored. Use only if you know IMF WEO or OECD data has been updated since you last ran}
 }
 \value{
-Returns a \tibble{tibble}.
+Returns a \code{tibble}.
 }
 \description{
 `delfator_country_year_combs` returns a returns a list of available countriy/ year combinations in the WEO and/ or OECD PPPEX and defaltor data sets.

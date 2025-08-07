@@ -34,12 +34,12 @@ dev_update_data <- function() {
 
   # 1. Fetch data
   oecd_ppp <- get_oecd_ppp() |> add_marker_row()
-  imf_ppp  <- get_imf_ppp() |> add_marker_row()
+  imf_ppp <- get_imf_ppp() |> add_marker_row()
   imf_gdpd <- get_imf_gdpd() |> add_marker_row()
 
   # 2. Save datasets
   usethis::use_data(oecd_ppp, overwrite = TRUE)
-  usethis::use_data(imf_ppp,  overwrite = TRUE)
+  usethis::use_data(imf_ppp, overwrite = TRUE)
   usethis::use_data(imf_gdpd, overwrite = TRUE)
 
   # 3. Save timestamp
@@ -56,7 +56,7 @@ dev_update_data <- function() {
 
   invisible(list(
     oecd_ppp = oecd_ppp,
-    imf_ppp  = imf_ppp,
+    imf_ppp = imf_ppp,
     imf_gdpd = imf_gdpd,
     update_meta = update_meta
   ))
@@ -67,4 +67,3 @@ dev_update_data()
 # Roberts sys review for testing purposes
 rob_sr <- read.csv("data-raw/rob_sr.csv")
 usethis::use_data(rob_sr, overwrite = TRUE)
-

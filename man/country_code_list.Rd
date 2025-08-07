@@ -7,7 +7,7 @@
 country_code_list()
 }
 \value{
-Returns a \tibble{tibble}.
+Returns a \code{tibble}.
 }
 \description{
 `country_code_list` returns a returns a list of available countries in the WEO data set.

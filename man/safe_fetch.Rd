@@ -4,7 +4,16 @@
 \alias{safe_fetch}
 \title{Prepare internal data in temporary directory}
 \usage{
-safe_fetch(fetch_fn, fallback_name, filename)
+safe_fetch(fetch_fn, fallback_name, filename, dir)
+}
+\arguments{
+\item{fetch_fn}{function to use to fetch data from api.}
+
+\item{fallback_name}{name of internal dataset to use as fallback.}
+
+\item{filename}{name of file in temp folder.}
+
+\item{dir}{character string contain temp directory path.}
 }
 \value{
 Path to the temporary data directory
