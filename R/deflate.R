@@ -162,16 +162,17 @@ deflate <- function(
 
       # Perform deflation
       output_data <- input_data |>
-        dplyr::left_join(tbl, by = c("country_base2" = "country", year_base = "year")) |>
+        dplyr::left_join(tbl, dplyr::join_by(!!rlang::sym("country_base2") == country, !!rlang::sym(year_base) == year)) |>
         dplyr::mutate(deflate_orig = as.numeric(value_gdpd), PPP_orig = as.numeric(value_pppex)) |>
         dplyr::select(-value_gdpd, -value_pppex) |>
-        dplyr::left_join(tbl, by = c("country_target2" = "country", year_target = "year")) |>
+        dplyr::left_join(tbl, dplyr::join_by(!!rlang::sym("country_target2") == country, !!rlang::sym(year_target) == year)) |>
         dplyr::mutate(deflate_target = as.numeric(value_gdpd), PPP_target = as.numeric(value_pppex)) |>
         dplyr::select(-value_gdpd, -value_pppex) |>
         dplyr::mutate(!!cost_target := (deflate_target * PPP_target) / (deflate_orig * PPP_orig) * .data[[cost_base]]) |>
         dplyr::select(-c("PPP_orig", "deflate_orig", "PPP_target", "deflate_target", "country_base2", "country_target2"))
 
       return(output_data)
+
     },
     error = function(e) {
       stop("deflate() failed: ", e$message)

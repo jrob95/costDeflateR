@@ -30,7 +30,8 @@ Imports:
     countrycode,
     rsdmx,
     dplyr,
-    tibble
+    tibble,
+    rlang
 Depends: 
     R (>= 3.5)
 RoxygenNote: 7.3.2
