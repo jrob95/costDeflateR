@@ -1,7 +1,3 @@
-library(testthat)
-library(httptest)
-library(dplyr)
-
 test_that("deflate returns expected output with valid input", {
   with_mock_api({
     input_data <- data.frame(
