@@ -45,6 +45,8 @@ test_that("country_cleaner converts country names to ISO3C codes", {
 
 test_that("country_cleaner returns NA for unknown country names", {
   input <- c("Atlantis", "Wakanda")
-  result <- country_cleaner(input)
+
+  expect_warning(country_cleaner(input))
+  result <- suppressWarnings(country_cleaner(input))
   expect_true(all(is.na(result)))
 })

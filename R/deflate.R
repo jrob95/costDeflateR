@@ -83,7 +83,7 @@ deflate <- function(
       }
 
       # Validate input_data
-      if (!is.data.frame(input_data) & !tibble::is.tibble(input_data)) {
+      if (!is.data.frame(input_data) & !tibble::is_tibble(input_data)) {
         stop("`input_data` must be a data.frame or tibble.")
       }
 

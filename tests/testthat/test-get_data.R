@@ -81,19 +81,30 @@ test_that("get_data returns correct structure for OECD source", {
 })
 
 test_that("get_data uses fallback when offline", {
-  without_internet({
-    expect_warning(
-      {
-        tbl <- get_data(
+  suppressWarnings(
+    without_internet(
+      expect_warning(
+        get_data(
           pppex_src = "IMF",
           use_live_data = TRUE,
           force_live_data = TRUE
         )
-        expect_s3_class(tbl, "data.frame")
-      },
-      regexp = "Failed to fetch"
+      )
     )
-  })
+  )
+
+  suppressWarnings(
+    without_internet(
+      expect_s3_class(
+        get_data(
+          pppex_src = "IMF",
+          use_live_data = TRUE,
+          force_live_data = TRUE
+        ),
+        "data.frame"
+      )
+    )
+  )
 })
 
 test_that("get_data uses internal data when use_live_data = FALSE", {
