@@ -30,7 +30,6 @@ dev_update_data <- function() {
     rbind(marker, df)
   }
 
-
   # 1. Fetch data
   oecd_ppp <- get_oecd_ppp() |> add_marker_row()
   imf_ppp <- get_imf_ppp() |> add_marker_row()
@@ -47,7 +46,7 @@ dev_update_data <- function() {
     updated_by = Sys.info()[["user"]],
     sources = list(
       oecd_ppp_key = "PPP_B1GQ",
-      imf_ppp_key  = "*.PPPGDP.*",
+      imf_ppp_key = "*.PPPGDP.*",
       imf_gdpd_key = "*.NGDP_D.*"
     )
   )
