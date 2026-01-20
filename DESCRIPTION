@@ -18,8 +18,7 @@ Authors@R: c(
          email = "rex.parsons94@gmail.com",
          role = c("ctb"),
          comment = c(ORCID = "0000-0002-6053-8174"))
-)
-Maintainer: The package maintainer <jack.roberts@connect.qut.edu.au>
+  )
 Description: This package takes data from the International Monetary Fund's world
   economic output and the Organisation for Economic Co-operation and Development,
   namely, purchasing power parity exchange rates and gross domestic product
@@ -38,8 +37,8 @@ Imports:
     tibble,
     rlang
 Depends: 
-    R (>= 3.5)
-RoxygenNote: 7.3.2
+    R (>= 4.1.0)
+RoxygenNote: 7.3.3
 Suggests: 
     httptest,
     testthat (>= 3.0.0)
