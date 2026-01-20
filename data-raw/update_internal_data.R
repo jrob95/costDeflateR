@@ -31,7 +31,6 @@ dev_update_data <- function() {
   }
 
 
-
   # 1. Fetch data
   oecd_ppp <- get_oecd_ppp() |> add_marker_row()
   imf_ppp <- get_imf_ppp() |> add_marker_row()

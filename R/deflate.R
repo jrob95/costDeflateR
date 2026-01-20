@@ -60,17 +60,18 @@
 #'
 #' @export
 deflate <- function(
-    input_data,
-    cost_base,
-    year_base,
-    country_base,
-    year_target,
-    country_target = "USA",
-    cost_target = "cost_target",
-    pppex_src = "IMF",
-    rename_countries = TRUE,
-    use_live_data = TRUE,
-    force_live_data = FALSE) {
+  input_data,
+  cost_base,
+  year_base,
+  country_base,
+  year_target,
+  country_target = "USA",
+  cost_target = "cost_target",
+  pppex_src = "IMF",
+  rename_countries = TRUE,
+  use_live_data = TRUE,
+  force_live_data = FALSE
+) {
   tryCatch(
     {
       # Validate pppex_src
@@ -172,7 +173,6 @@ deflate <- function(
         dplyr::select(-c("PPP_orig", "deflate_orig", "PPP_target", "deflate_target", "country_base2", "country_target2"))
 
       return(output_data)
-
     },
     error = function(e) {
       stop("deflate() failed: ", e$message)
