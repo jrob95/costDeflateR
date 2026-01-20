@@ -3,17 +3,22 @@ Type: Package
 Title: Convert costs between times and currencies
 Version: 0.1.0.9000
 Authors@R: c(
-    person(given = "Jack",
-           family = "Roberts", 
-           email = "jack.roberts@connect.qut.edu.au",
-           role = c("aut", "cre"),
-           comment = c(ORCID = "0000-0003-3519-4725")),
-    person(given = "Ian",
-           family = "Schemilt", 
-           email = "",
-           role = c("aut"),
-           comment = c(ORCID = ""))
-  )
+  person(given = "Jack",
+         family = "Roberts", 
+         email = "jack.roberts@connect.qut.edu.au",
+         role = c("aut", "cre"),
+         comment = c(ORCID = "0000-0003-3519-4725")),
+  person(given = "Ian",
+         family = "Schemilt", 
+         email = "",
+         role = c("aut"),
+         comment = c(ORCID = "")),
+  person(given = "Rex",
+         family = "Parsons", 
+         email = "rex.parsons94@gmail.com",
+         role = c("ctb"),
+         comment = c(ORCID = "0000-0002-6053-8174"))
+)
 Maintainer: The package maintainer <jack.roberts@connect.qut.edu.au>
 Description: This package takes data from the International Monetary Fund's world
   economic output and the Organisation for Economic Co-operation and Development,
