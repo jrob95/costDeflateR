@@ -1,7 +1,7 @@
 Package: costDeflateR
 Type: Package
 Title: Convert costs between times and currencies
-Version: 0.1.0
+Version: 0.1.0.9000
 Authors@R: c(
     person(given = "Jack",
            family = "Roberts", 
