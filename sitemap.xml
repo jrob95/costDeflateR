@@ -1,0 +1,23 @@
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>/404.html</loc></url>
+<url><loc>/LICENSE.html</loc></url>
+<url><loc>/authors.html</loc></url>
+<url><loc>/index.html</loc></url>
+<url><loc>/reference/cond_update_internal_data.html</loc></url>
+<url><loc>/reference/country_cleaner.html</loc></url>
+<url><loc>/reference/country_code_list.html</loc></url>
+<url><loc>/reference/deflate.html</loc></url>
+<url><loc>/reference/delfator_country_year_combs.html</loc></url>
+<url><loc>/reference/get_data.html</loc></url>
+<url><loc>/reference/get_imf.html</loc></url>
+<url><loc>/reference/get_imf_gdpd.html</loc></url>
+<url><loc>/reference/get_imf_ppp.html</loc></url>
+<url><loc>/reference/get_oecd_ppp.html</loc></url>
+<url><loc>/reference/imf_gdpd.html</loc></url>
+<url><loc>/reference/imf_ppp.html</loc></url>
+<url><loc>/reference/index.html</loc></url>
+<url><loc>/reference/oecd_ppp.html</loc></url>
+<url><loc>/reference/rob_sr.html</loc></url>
+<url><loc>/reference/safe_fetch.html</loc></url>
+</urlset>
+

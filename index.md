@@ -1,0 +1,98 @@
+# costDeflateR
+
+**costDeflateR** is an R package designed to help you deflate currency
+values across countries and years using GDP deflators and PPP exchange
+rates from IMF and OECD datasets. It provides tools for adjusting
+monetary values to a common base, ensuring comparability across time and
+geography.
+
+## Installation
+
+``` r
+# Install from GitHub (if using devtools or remotes)
+# remotes::install_github("jrob95/costDeflateR")
+```
+
+## Features
+
+- [`deflate()`](reference/deflate.md): Main function to deflate currency
+  values using GDP deflators and PPP exchange rates. You can use live
+  IMF/ OECD data using the `use_live_data = TRUE`
+- [`delfator_country_year_combs()`](reference/delfator_country_year_combs.md):
+  Lists available country-year combinations in the reference datasets.
+
+## Example Usage
+
+### Deflating Currency Values
+
+``` r
+library(costDeflateR)
+
+# Sample data
+data <- data.frame(
+  country_base = c("USA", "Germany"),
+  year_base = c(2010, 2015),
+  country_target = c("France", "Italy"),
+  year_target = c(2015, 2020),
+  cost_base = c(100, 200)
+)
+
+# Deflate currency values
+deflated_data <- deflate(
+  input_data = data,
+  cost_base = "cost_base",
+  year_base = "year_base",
+  country_base = "country_base",
+  year_target = "year_target",
+  country_target = "country_target"
+)
+
+print(deflated_data)
+```
+
+### Using Constant Values
+
+``` r
+data <- data.frame(cost_base = c(100, 200))
+
+deflated_data <- deflate(
+  input_data = data,
+  cost_base = "cost_base",
+  year_base = "2010",
+  country_base = "Australia",
+  year_target = "2020",
+  country_target = "United States",
+  rename_countries = TRUE
+)
+
+print(deflated_data)
+```
+
+## Helper Functions
+
+### Available Country-Year Combinations
+
+You might not know which year/ country combinations have data present in
+your PPPEX and NGDP_D combination choice.
+[`delfator_country_year_combs()`](reference/delfator_country_year_combs.md)
+lets you check.
+
+``` r
+delfator_country_year_combs(pppex_src = "IMF")
+```
+
+## Data Sources
+
+- **IMF World Economic Outlook (WEO)**
+  [Link](https://www.imf.org/en/Publications/SPROLLS/world-economic-outlook-databases#sort=%40imfdate%20descending)
+- **OECD PPP Exchange Rates**
+  [Link](https://www.oecd.org/en/data/indicators/purchasing-power-parities-ppp.html)
+
+## Contributing
+
+Feel free to open issues or submit pull requests. Contributions are
+welcome!
+
+## License
+
+LGPL-3.0 © Jack Roberts and Ian Shemilt
