@@ -28,10 +28,16 @@ country_code_list <- function() {
 #' @param force_live_data A `logical`. Makes call to `update_internal_data()` regardless of age of data currently stored. Use only if you know IMF WEO or OECD data has been updated since you last ran
 #' @return Returns a \code{tibble}.
 #' @export
-delfator_country_year_combs <- function(pppex_src = "IMF", use_live_data = TRUE, force_live_data = FALSE) {
+delfator_country_year_combs <- function(
+  pppex_src = "IMF",
+  use_live_data = TRUE,
+  force_live_data = FALSE
+) {
   tryCatch(
     {
-      if (!pppex_src %in% c("IMF", "OECD")) stop("pppex_src must be either \"IMF\" or \"OECD\"")
+      if (!pppex_src %in% c("IMF", "OECD")) {
+        stop("pppex_src must be either \"IMF\" or \"OECD\"")
+      }
 
       tbl <- get_data(pppex_src, use_live_data, force_live_data) |>
         dplyr::select(country, year) |>
@@ -54,7 +60,11 @@ delfator_country_year_combs <- function(pppex_src = "IMF", use_live_data = TRUE,
 country_cleaner <- function(data) {
   tryCatch(
     {
-      countrycode::countrycode(data, origin = "country.name", destination = "iso3c")
+      countrycode::countrycode(
+        data,
+        origin = "country.name",
+        destination = "iso3c"
+      )
     },
     error = function(e) {
       stop("country_cleaner() failed: ", e$message)

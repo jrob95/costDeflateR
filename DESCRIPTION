@@ -1,20 +1,24 @@
 Package: costDeflateR
 Type: Package
 Title: Convert costs between times and currencies
-Version: 0.1.0
+Version: 0.1.0.9000
 Authors@R: c(
-    person(given = "Jack",
-           family = "Roberts", 
-           email = "jack.roberts@connect.qut.edu.au",
-           role = c("aut", "cre"),
-           comment = c(ORCID = "0000-0003-3519-4725")),
-    person(given = "Ian",
-           family = "Schemilt", 
-           email = "",
-           role = c("aut"),
-           comment = c(ORCID = ""))
+  person(given = "Jack",
+         family = "Roberts", 
+         email = "jack.roberts@connect.qut.edu.au",
+         role = c("aut", "cre"),
+         comment = c(ORCID = "0000-0003-3519-4725")),
+  person(given = "Ian",
+         family = "Schemilt", 
+         email = "",
+         role = c("aut"),
+         comment = c(ORCID = "")),
+  person(given = "Rex",
+         family = "Parsons", 
+         email = "rex.parsons94@gmail.com",
+         role = c("ctb"),
+         comment = c(ORCID = "0000-0002-6053-8174"))
   )
-Maintainer: The package maintainer <jack.roberts@connect.qut.edu.au>
 Description: This package takes data from the International Monetary Fund's world
   economic output and the Organisation for Economic Co-operation and Development,
   namely, purchasing power parity exchange rates and gross domestic product
@@ -33,10 +37,9 @@ Imports:
     tibble,
     rlang
 Depends: 
-    R (>= 3.5)
-RoxygenNote: 7.3.2
+    R (>= 4.1.0)
+RoxygenNote: 7.3.3
 Suggests: 
     httptest,
-    testthat (>= 3.0.0),
-    fs
+    testthat (>= 3.0.0)
 Config/testthat/edition: 3

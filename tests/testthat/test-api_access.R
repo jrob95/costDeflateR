@@ -1,7 +1,3 @@
-library(testthat)
-library(httptest)
-library(dplyr)
-
 # with_mock_api({
 #   test_that("get_oecd_ppp returns expected structure", {
 #     data <- get_oecd_ppp()

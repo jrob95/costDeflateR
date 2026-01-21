@@ -60,37 +60,47 @@
 #'
 #' @export
 deflate <- function(
-    input_data,
-    cost_base,
-    year_base,
-    country_base,
-    year_target,
-    country_target = "USA",
-    cost_target = "cost_target",
-    pppex_src = "IMF",
-    rename_countries = TRUE,
-    use_live_data = TRUE,
-    force_live_data = FALSE) {
+  input_data,
+  cost_base,
+  year_base,
+  country_base,
+  year_target,
+  country_target = "USA",
+  cost_target = "cost_target",
+  pppex_src = "IMF",
+  rename_countries = TRUE,
+  use_live_data = TRUE,
+  force_live_data = FALSE
+) {
   tryCatch(
     {
       # Validate pppex_src
       if (!pppex_src %in% c("IMF", "OECD")) {
-        stop(sprintf("`pppex_src` must be either \"IMF\" or \"OECD\". '%s' is not allowed.", pppex_src))
+        stop(sprintf(
+          "`pppex_src` must be either \"IMF\" or \"OECD\". '%s' is not allowed.",
+          pppex_src
+        ))
       }
 
       # Validate input_data
-      if (!is.data.frame(input_data) & !tibble::is.tibble(input_data)) {
+      if (!is.data.frame(input_data) & !tibble::is_tibble(input_data)) {
         stop("`input_data` must be a data.frame or tibble.")
       }
 
       # Validate cost_base column
       if (!(cost_base %in% names(input_data))) {
-        stop(sprintf("Column '%s' specified in `cost_base` not found in input_data.", cost_base))
+        stop(sprintf(
+          "Column '%s' specified in `cost_base` not found in input_data.",
+          cost_base
+        ))
       }
 
       # Validate cost_target name
       if (cost_target %in% names(input_data)) {
-        warning(sprintf("Column '%s' already exists in input_data and will be overwritten.", cost_target))
+        warning(sprintf(
+          "Column '%s' already exists in input_data and will be overwritten.",
+          cost_target
+        ))
       }
 
       # Load reference data
@@ -99,7 +109,9 @@ deflate <- function(
       # Validate reference data structure
       required_cols <- c("country", "year", "value_gdpd", "value_pppex")
       if (!all(required_cols %in% names(tbl))) {
-        stop("Reference data is missing required columns: country, year, value_gdpd, value_pppex.")
+        stop(
+          "Reference data is missing required columns: country, year, value_gdpd, value_pppex."
+        )
       }
 
       # Helper: create column if value is not a column name
@@ -124,7 +136,11 @@ deflate <- function(
       input_data <- result[[1]]
       year_target <- result[[2]]
 
-      result <- check_and_create_field(input_data, "country_target", country_target)
+      result <- check_and_create_field(
+        input_data,
+        "country_target",
+        country_target
+      )
       input_data <- result[[1]]
       country_target <- result[[2]]
 
@@ -136,43 +152,111 @@ deflate <- function(
         if (all(grepl("^-?\\d*\\.?\\d+$", x))) {
           return(as.numeric(x))
         }
-        stop(sprintf("Field '%s' must be numeric or contain only numeric characters.", field_name))
+        stop(sprintf(
+          "Field '%s' must be numeric or contain only numeric characters.",
+          field_name
+        ))
       }
 
-      input_data[[cost_base]] <- can_be_numeric(input_data[[cost_base]], cost_base)
-      input_data[[year_base]] <- can_be_numeric(input_data[[year_base]], year_base)
-      input_data[[year_target]] <- can_be_numeric(input_data[[year_target]], year_target)
+      input_data[[cost_base]] <- can_be_numeric(
+        input_data[[cost_base]],
+        cost_base
+      )
+      input_data[[year_base]] <- can_be_numeric(
+        input_data[[year_base]],
+        year_base
+      )
+      input_data[[year_target]] <- can_be_numeric(
+        input_data[[year_target]],
+        year_target
+      )
 
       # Clean country names if needed
-      input_data$country_base2 <- if (rename_countries) country_cleaner(input_data[[country_base]]) else input_data[[country_base]]
-      input_data$country_target2 <- if (rename_countries) country_cleaner(input_data[[country_target]]) else input_data[[country_target]]
+      input_data$country_base2 <- if (rename_countries) {
+        country_cleaner(input_data[[country_base]])
+      } else {
+        input_data[[country_base]]
+      }
+      input_data$country_target2 <- if (rename_countries) {
+        country_cleaner(input_data[[country_target]])
+      } else {
+        input_data[[country_target]]
+      }
 
       # Validate year-country combinations
-      check_year_country_combination <- function(df, year_field, country_field, ref_tbl) {
+      check_year_country_combination <- function(
+        df,
+        year_field,
+        country_field,
+        ref_tbl
+      ) {
         combos <- paste0(df[[country_field]], " - ", df[[year_field]])
         valid_combos <- paste0(ref_tbl$country, " - ", ref_tbl$year)
         invalid <- setdiff(combos, valid_combos)
         if (length(invalid) > 0) {
-          stop(sprintf("Invalid year-country combinations found: %s", paste(invalid, collapse = ", ")))
+          stop(sprintf(
+            "Invalid year-country combinations found: %s",
+            paste(invalid, collapse = ", ")
+          ))
         }
       }
 
-      check_year_country_combination(input_data, year_base, "country_base2", tbl)
-      check_year_country_combination(input_data, year_target, "country_target2", tbl)
+      check_year_country_combination(
+        input_data,
+        year_base,
+        "country_base2",
+        tbl
+      )
+      check_year_country_combination(
+        input_data,
+        year_target,
+        "country_target2",
+        tbl
+      )
 
       # Perform deflation
       output_data <- input_data |>
-        dplyr::left_join(tbl, dplyr::join_by(!!rlang::sym("country_base2") == country, !!rlang::sym(year_base) == year)) |>
-        dplyr::mutate(deflate_orig = as.numeric(value_gdpd), PPP_orig = as.numeric(value_pppex)) |>
+        dplyr::left_join(
+          tbl,
+          dplyr::join_by(
+            !!rlang::sym("country_base2") == country,
+            !!rlang::sym(year_base) == year
+          )
+        ) |>
+        dplyr::mutate(
+          deflate_orig = as.numeric(value_gdpd),
+          PPP_orig = as.numeric(value_pppex)
+        ) |>
         dplyr::select(-value_gdpd, -value_pppex) |>
-        dplyr::left_join(tbl, dplyr::join_by(!!rlang::sym("country_target2") == country, !!rlang::sym(year_target) == year)) |>
-        dplyr::mutate(deflate_target = as.numeric(value_gdpd), PPP_target = as.numeric(value_pppex)) |>
+        dplyr::left_join(
+          tbl,
+          dplyr::join_by(
+            !!rlang::sym("country_target2") == country,
+            !!rlang::sym(year_target) == year
+          )
+        ) |>
+        dplyr::mutate(
+          deflate_target = as.numeric(value_gdpd),
+          PPP_target = as.numeric(value_pppex)
+        ) |>
         dplyr::select(-value_gdpd, -value_pppex) |>
-        dplyr::mutate(!!cost_target := (deflate_target * PPP_target) / (deflate_orig * PPP_orig) * .data[[cost_base]]) |>
-        dplyr::select(-c("PPP_orig", "deflate_orig", "PPP_target", "deflate_target", "country_base2", "country_target2"))
+        dplyr::mutate(
+          !!cost_target := (deflate_target * PPP_target) /
+            (deflate_orig * PPP_orig) *
+            .data[[cost_base]]
+        ) |>
+        dplyr::select(
+          -c(
+            "PPP_orig",
+            "deflate_orig",
+            "PPP_target",
+            "deflate_target",
+            "country_base2",
+            "country_target2"
+          )
+        )
 
       return(output_data)
-
     },
     error = function(e) {
       stop("deflate() failed: ", e$message)

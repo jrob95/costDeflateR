@@ -8,30 +8,41 @@
 #' @param dl_imfppp Logical. Whether to check/update IMF PPP data.
 #' @param dl_imfgdpd Logical. Whether to check/update IMF GDP deflator data.
 #' @return Path to the temporary data directory
-cond_update_internal_data <- function(force = FALSE, dl_oecdppp = TRUE, dl_imfppp = TRUE, dl_imfgdpd = TRUE) {
+cond_update_internal_data <- function(
+  force = FALSE,
+  dl_oecdppp = TRUE,
+  dl_imfppp = TRUE,
+  dl_imfgdpd = TRUE
+) {
   is_stale <- function(file_path) {
     if (!file.exists(file_path)) {
       return(TRUE)
     }
-    age_days <- as.numeric(difftime(Sys.time(), file.info(file_path)$mtime, units = "days"))
+    age_days <- as.numeric(difftime(
+      Sys.time(),
+      file.info(file_path)$mtime,
+      units = "days"
+    ))
     age_days > 7
   }
 
   dir <- get_temp_data_dir()
-  if (!dir.exists(dir)) dir.create(dir, recursive = TRUE)
+  if (!dir.exists(dir)) {
+    dir.create(dir, recursive = TRUE)
+  }
 
   # Define file paths
   files <- list(
-    oecd_ppp  = file.path(dir, "oecd_ppp.rds"),
-    imf_ppp   = file.path(dir, "imf_ppp.rds"),
-    imf_gdpd  = file.path(dir, "imf_gdpd.rds")
+    oecd_ppp = file.path(dir, "oecd_ppp.rds"),
+    imf_ppp = file.path(dir, "imf_ppp.rds"),
+    imf_gdpd = file.path(dir, "imf_gdpd.rds")
   )
 
   # Determine which files need updating
   update_flags <- c(
-    oecd_ppp  = dl_oecdppp && (force || is_stale(files$oecd_ppp)),
-    imf_ppp   = dl_imfppp && (force || is_stale(files$imf_ppp)),
-    imf_gdpd  = dl_imfgdpd && (force || is_stale(files$imf_gdpd))
+    oecd_ppp = dl_oecdppp && (force || is_stale(files$oecd_ppp)),
+    imf_ppp = dl_imfppp && (force || is_stale(files$imf_ppp)),
+    imf_gdpd = dl_imfgdpd && (force || is_stale(files$imf_gdpd))
   )
 
   # Update only the stale or missing datasets
@@ -80,7 +91,9 @@ safe_fetch <- function(fetch_fn, fallback_name, filename, dir) {
 
 use_internal_data <- function(fallback_name, filename) {
   dir <- file.path(tempdir(), "costDeflateR_data")
-  if (!dir.exists(dir)) dir.create(dir, recursive = TRUE)
+  if (!dir.exists(dir)) {
+    dir.create(dir, recursive = TRUE)
+  }
   fallback <- get(fallback_name, envir = asNamespace("costDeflateR"))
   saveRDS(fallback, file.path(dir, filename))
 }
@@ -101,8 +114,12 @@ get_data <- function(pppex_src, use_live_data, force_live_data) {
   # deal with internal/ live data.
   dl_imfppp <- dl_oecdppp <- FALSE
 
-  if (pppex_src == "IMF") dl_imfppp <- TRUE
-  if (pppex_src == "OECD") dl_oecdppp <- TRUE
+  if (pppex_src == "IMF") {
+    dl_imfppp <- TRUE
+  }
+  if (pppex_src == "OECD") {
+    dl_oecdppp <- TRUE
+  }
   # get live data, store temp.
   if (use_live_data) {
     message("Attempting to use live data from IMF/ OECD")
@@ -122,7 +139,11 @@ get_data <- function(pppex_src, use_live_data, force_live_data) {
     message(paste0(
       "Using internal data. Last updated: ",
       format(
-        as.POSIXct(as.numeric(update_meta["updated_at"]), origin = "1970-01-01", tz = "UTC"),
+        as.POSIXct(
+          as.numeric(update_meta["updated_at"]),
+          origin = "1970-01-01",
+          tz = "UTC"
+        ),
         "%Y-%m-%d %H:%M:%S %Z"
       )
     ))
@@ -145,6 +166,10 @@ get_data <- function(pppex_src, use_live_data, force_live_data) {
 
   # country combs for later
   tbl <- ppp_vals |>
-    dplyr::inner_join(gdpd_vals, dplyr::join_by(country, year), suffix = c("_pppex", "_gdpd"))
+    dplyr::inner_join(
+      gdpd_vals,
+      dplyr::join_by(country, year),
+      suffix = c("_pppex", "_gdpd")
+    )
   return(tbl)
 }
