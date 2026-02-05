@@ -12,6 +12,7 @@
 #' @usage NULL
 #'
 get_oecd_ppp <- function() {
+  check_internet()
   url <- paste0(
     "https://sdmx.oecd.org/public/rest/data/",
     "OECD.SDD.NAD,DSD_NAMAIN10@DF_TABLE4,1.0/",
@@ -50,6 +51,7 @@ get_oecd_ppp <- function() {
 #'
 #' @usage NULL
 get_imf <- function(key) {
+  check_internet()
   tryCatch(
     {
       data <- as.data.frame(rsdmx::readSDMX(

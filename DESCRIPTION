@@ -35,7 +35,8 @@ Imports:
     rsdmx,
     dplyr,
     tibble,
-    rlang
+    rlang,
+    curl
 Depends: 
     R (>= 4.1.0)
 RoxygenNote: 7.3.3
