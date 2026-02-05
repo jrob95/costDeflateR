@@ -5,6 +5,7 @@
 \title{Conditionally update internal data}
 \usage{
 cond_update_internal_data(
+  dir,
   force = FALSE,
   dl_oecdppp = TRUE,
   dl_imfppp = TRUE,
@@ -12,6 +13,8 @@ cond_update_internal_data(
 )
 }
 \arguments{
+\item{dir}{Character. A path to store data. If missing, will use a temp dir.}
+
 \item{force}{Logical. If TRUE, forces the update regardless of data age.}
 
 \item{dl_oecdppp}{Logical. Whether to check/update OECD PPP data.}
