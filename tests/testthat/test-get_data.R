@@ -9,8 +9,8 @@ make_empty_dir <- function() {
 
 
 with_mock_api({
+  dir_empty <- make_empty_dir()
   test_that("creates temp directory and downloads data if missing", {
-    dir_empty <- make_empty_dir()
     cond_update_internal_data(force = TRUE, dir = dir_empty)
     expect_true(dir.exists(dir_empty))
 
