@@ -12,14 +12,14 @@ deflate(
   year_target,
   country_target = "USA",
   cost_target = "cost_target",
-  pppex_src = "IMF",
+  pppex_src = c("IMF", "OECD"),
   rename_countries = TRUE,
   use_live_data = TRUE,
   force_live_data = FALSE
 )
 }
 \arguments{
-\item{input_data}{A `data.frame` containing the data to be deflated.}
+\item{input_data}{A `data.frame` containing the data to be deflated. Can be missing if values (or vectors of values) are specified for the cost, year and country base and targets.}
 
 \item{cost_base}{A `character`: the name of the column in `input_data` containing base cost values.}
 
@@ -73,14 +73,9 @@ deflated_data <- deflate(
 )
 
 # You can also also specify values in the function for year and country
-data <- data.frame(
-  cost_base = c(100, 200)
-)
-
 # Example 2: Using constant values for base and target
 deflated_data <- deflate(
-  input_data = data,
-  cost_base = "cost_base",
+  cost_base = c(100, 200),
   year_base = "2010",
   country_base = "Australia",
   year_target = "2020",

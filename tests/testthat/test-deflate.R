@@ -35,7 +35,7 @@ test_that("deflate throws error with invalid pppex_src", {
       country_target = "France",
       pppex_src = "INVALID"
     ),
-    regexp = "must be either \"IMF\" or \"OECD\""
+    regexp = 'should be one of "IMF", "OECD"'
   )
 })
 
@@ -61,12 +61,9 @@ test_that("deflate throws error with non-numeric year", {
   )
 })
 
-test_that("deflate creates missing columns when values are constants", {
-  input_data <- data.frame(cost_base = c(100, 200))
-
+test_that("deflate works when specified using vectors instead of data.frame", {
   result <- deflate(
-    input_data = input_data,
-    cost_base = "cost_base",
+    cost_base = c(100, 200),
     year_base = "2010",
     country_base = "Australia",
     year_target = "2020",
