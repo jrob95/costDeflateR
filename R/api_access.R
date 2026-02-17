@@ -31,7 +31,7 @@ get_oecd_ppp <- function() {
         dplyr::mutate(TIME_PERIOD = as.numeric(TIME_PERIOD))
     },
     error = function(e) {
-      warning("Failed to fetch OECD PPP data: ", conditionMessage(e))
+      cli::cli_warn("Failed to fetch OECD PPP data: {conditionMessage(e)}")
       NULL
     }
   )
@@ -64,7 +64,7 @@ get_imf <- function(key) {
         )
     },
     error = function(e) {
-      warning("Failed to fetch IMF data: ", conditionMessage(e))
+      cli::cli_warn("Failed to fetch IMF data: {conditionMessage(e)}")
       NULL
     }
   )

@@ -31,13 +31,14 @@ LazyData: true
 URL: https://github.com/jrob95/costDeflateR
 BugReports: https://github.com/jrob95/costDeflateR/issues
 Imports: 
+    assertthat,
+    checkmate,
+    cli,
     countrycode,
-    rsdmx,
+    curl,
     dplyr,
     rlang,
-    curl,
-    checkmate,
-    assertthat
+    rsdmx
 Depends: 
     R (>= 4.1.0)
 RoxygenNote: 7.3.3

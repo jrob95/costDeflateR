@@ -124,10 +124,9 @@ deflate <- function(
   checkmate::assert_scalar(cost_target)
 
   if (cost_target %in% names(input_data)) {
-    warning(sprintf(
-      "Column '%s' already exists in input_data and will be overwritten.",
-      cost_target
-    ))
+    cli::cli_warn(
+      "Column '{cost_target}' already exists in input_data and will be overwritten."
+    )
     input_data <- dplyr::select(input_data, -!!rlang::sym(cost_target))
   }
 

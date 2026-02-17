@@ -12,7 +12,7 @@ country_code_list <- function() {
       countrycode::codelist |> dplyr::select(country.name.en, iso3c)
     },
     error = function(e) {
-      stop("country_code_list() failed: ", e$message)
+      cli::cli_abort("country_code_list() failed: {e$message}")
     }
   )
 }
@@ -36,7 +36,7 @@ delfator_country_year_combs <- function(
   tryCatch(
     {
       if (!pppex_src %in% c("IMF", "OECD")) {
-        stop("pppex_src must be either \"IMF\" or \"OECD\"")
+        cli::cli_abort("pppex_src must be either \"IMF\" or \"OECD\"")
       }
 
       get_data(pppex_src, use_live_data, force_live_data) |>
@@ -44,7 +44,7 @@ delfator_country_year_combs <- function(
         dplyr::left_join(country_code_list(), dplyr::join_by(country == iso3c))
     },
     error = function(e) {
-      stop("deflator_country_year_combs() failed: ", e$message)
+      cli::cli_abort("deflator_country_year_combs() failed: {e$message}")
     }
   )
 }
@@ -66,7 +66,7 @@ country_cleaner <- function(data) {
       )
     },
     error = function(e) {
-      stop("country_cleaner() failed: ", e$message)
+      cli::cli_abort("country_cleaner() failed: {e$message}")
     }
   )
 }

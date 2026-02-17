@@ -40,7 +40,7 @@ cond_update_internal_data <- function(
 
   # Update only the stale or missing datasets
   if (update_flags["oecd_ppp"]) {
-    message("Updating OECD PPP data...")
+    cli::cli_progress_step("Updating OECD PPP data...")
     safe_fetch(
       fetch_fn = get_oecd_ppp,
       fallback_name = "oecd_ppp",
@@ -50,7 +50,7 @@ cond_update_internal_data <- function(
     )
   }
   if (update_flags["imf_ppp"]) {
-    message("Updating IMF PPP data...")
+    cli::cli_progress_step("Updating IMF PPP data...")
     safe_fetch(
       fetch_fn = get_imf_ppp,
       fallback_name = "imf_ppp",
@@ -60,7 +60,7 @@ cond_update_internal_data <- function(
     )
   }
   if (update_flags["imf_gdpd"]) {
-    message("Updating IMF GDPD data...")
+    cli::cli_progress_step("Updating IMF GDPD data...")
     safe_fetch(
       fetch_fn = get_imf_gdpd,
       fallback_name = "imf_gdpd",
@@ -103,17 +103,18 @@ safe_fetch <- function(fetch_fn, fallback_name, filename, dir, force) {
     {
       data <- fetch_fn()
       saveRDS(data, file.path(dir, filename))
-      message("Loaded live data: ", fallback_name)
+      cli::cli_progress_step("Loaded live data: ", fallback_name)
     },
     error = function(e) {
       if (force) {
-        stop(
-          "Failed to fetch ",
-          fallback_name,
-          ". Use `force = FALSE` to use fallback data."
+        cli::cli_abort(
+          "Failed to fetch {fallback_name}. Use `force = FALSE` to use fallback data."
         )
       }
-      warning("Failed to fetch ", fallback_name, ". Using internal fallback.")
+
+      cli::cli_warn(
+        "Failed to fetch {fallback_name}. Using internal fallback."
+      )
       use_internal_data(fallback_name, filename, dir = dir)
     }
   )
@@ -154,7 +155,7 @@ get_data <- function(pppex_src, use_live_data, force_live_data, dir) {
       dir <- get_temp_data_dir()
     }
 
-    message("Attempting to use live data from IMF/ OECD")
+    cli::cli_progress_step("Attempting to use live data from IMF/ OECD")
     cond_update_internal_data(
       dir = dir,
       force = force_live_data,
@@ -173,17 +174,15 @@ get_data <- function(pppex_src, use_live_data, force_live_data, dir) {
     }
   } else {
     # else revert to old (can already call from internal data)
-    message(paste0(
-      "Using internal data. Last updated: ",
-      format(
-        as.POSIXct(
-          as.numeric(update_meta["updated_at"]),
-          origin = "1970-01-01",
-          tz = "UTC"
-        ),
-        "%Y-%m-%d %H:%M:%S %Z"
-      )
-    ))
+    last_updated <- format(
+      as.POSIXct(
+        as.numeric(update_meta["updated_at"]),
+        origin = "1970-01-01",
+        tz = "UTC"
+      ),
+      "%Y-%m-%d %H:%M:%S %Z"
+    )
+    cli::cli_progress_step("Using internal data. Last updated: {last_updated}")
   }
 
   # point data to correct dataset.

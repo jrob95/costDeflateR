@@ -16,7 +16,7 @@
 #' @noRd
 dev_update_data <- function() {
   devtools::load_all()
-  message("Updating internal data from IMF and OECD...")
+  cli::cli_progress_step("Updating internal data from IMF and OECD...")
 
   # Function to add a marker row to fallback internal data set to better differentiate between internal and live data
   add_marker_row <- function(df, country = "Marker", time = 1900, value = 0) {
