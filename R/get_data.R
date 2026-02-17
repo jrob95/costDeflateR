@@ -196,17 +196,14 @@ get_data <- function(pppex_src, use_live_data, force_live_data, dir) {
       dplyr::select(country = COUNTRY, year = TIME_PERIOD, value = PPP)
   }
 
-  if (TRUE) {
-    gdpd_vals <- imf_gdpd |>
-      dplyr::select(country = COUNTRY, year = TIME_PERIOD, value = NGDP_D)
-  }
+  gdpd_vals <- imf_gdpd |>
+    dplyr::select(country = COUNTRY, year = TIME_PERIOD, value = NGDP_D)
 
   # country combs for later
-  tbl <- ppp_vals |>
+  ppp_vals |>
     dplyr::inner_join(
       gdpd_vals,
       dplyr::join_by(country, year),
       suffix = c("_pppex", "_gdpd")
     )
-  return(tbl)
 }

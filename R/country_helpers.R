@@ -39,10 +39,9 @@ delfator_country_year_combs <- function(
         stop("pppex_src must be either \"IMF\" or \"OECD\"")
       }
 
-      tbl <- get_data(pppex_src, use_live_data, force_live_data) |>
+      get_data(pppex_src, use_live_data, force_live_data) |>
         dplyr::select(country, year) |>
         dplyr::left_join(country_code_list(), dplyr::join_by(country == iso3c))
-      return(tbl)
     },
     error = function(e) {
       stop("deflator_country_year_combs() failed: ", e$message)
