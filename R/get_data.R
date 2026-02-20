@@ -3,30 +3,23 @@
 #' Checks the age of each dataset in the temporary directory and updates only those
 #' that are missing or older than 7 days, or if `force` is set to TRUE.
 #'
+#' @param dir Character. A path to store data. If missing, will use a temp dir.
 #' @param force Logical. If TRUE, forces the update regardless of data age.
 #' @param dl_oecdppp Logical. Whether to check/update OECD PPP data.
 #' @param dl_imfppp Logical. Whether to check/update IMF PPP data.
 #' @param dl_imfgdpd Logical. Whether to check/update IMF GDP deflator data.
 #' @return Path to the temporary data directory
 cond_update_internal_data <- function(
+  dir,
   force = FALSE,
   dl_oecdppp = TRUE,
   dl_imfppp = TRUE,
   dl_imfgdpd = TRUE
 ) {
-  is_stale <- function(file_path) {
-    if (!file.exists(file_path)) {
-      return(TRUE)
-    }
-    age_days <- as.numeric(difftime(
-      Sys.time(),
-      file.info(file_path)$mtime,
-      units = "days"
-    ))
-    age_days > 7
+  if (missing(dir)) {
+    dir <- get_temp_data_dir()
   }
 
-  dir <- get_temp_data_dir()
   if (!dir.exists(dir)) {
     dir.create(dir, recursive = TRUE)
   }
@@ -47,20 +40,50 @@ cond_update_internal_data <- function(
 
   # Update only the stale or missing datasets
   if (update_flags["oecd_ppp"]) {
-    message("Updating OECD PPP data...")
-    safe_fetch(get_oecd_ppp, "oecd_ppp", "oecd_ppp.rds", dir)
+    cli::cli_progress_step("Updating OECD PPP data...")
+    safe_fetch(
+      fetch_fn = get_oecd_ppp,
+      fallback_name = "oecd_ppp",
+      filename = "oecd_ppp.rds",
+      dir = dir,
+      force = force
+    )
   }
   if (update_flags["imf_ppp"]) {
-    message("Updating IMF PPP data...")
-    safe_fetch(get_imf_ppp, "imf_ppp", "imf_ppp.rds", dir)
+    cli::cli_progress_step("Updating IMF PPP data...")
+    safe_fetch(
+      fetch_fn = get_imf_ppp,
+      fallback_name = "imf_ppp",
+      filename = "imf_ppp.rds",
+      dir = dir,
+      force = force
+    )
   }
   if (update_flags["imf_gdpd"]) {
-    message("Updating IMF GDPD data...")
-    safe_fetch(get_imf_gdpd, "imf_gdpd", "imf_gdpd.rds", dir)
+    cli::cli_progress_step("Updating IMF GDPD data...")
+    safe_fetch(
+      fetch_fn = get_imf_gdpd,
+      fallback_name = "imf_gdpd",
+      filename = "imf_gdpd.rds",
+      dir = dir,
+      force = force
+    )
+  }
+}
+
+
+is_stale <- function(file_path) {
+  if (!file.exists(file_path)) {
+    return(TRUE)
   }
 
-  # options(costDeflateR.temp_data_dir = dir)
-  # invisible(dir)
+  age_days <- as.numeric(difftime(
+    Sys.time(),
+    file.info(file_path)$mtime,
+    units = "days"
+  ))
+
+  age_days > 7
 }
 
 
@@ -72,25 +95,33 @@ cond_update_internal_data <- function(
 #' @param fallback_name name of internal dataset to use as fallback.
 #' @param filename name of file in temp folder.
 #' @param dir character string contain temp directory path.
+#' @param force Logical. If TRUE, forces the update regardless of data age.
 #'
 #' @return Path to the temporary data directory
-safe_fetch <- function(fetch_fn, fallback_name, filename, dir) {
+safe_fetch <- function(fetch_fn, fallback_name, filename, dir, force) {
   tryCatch(
     {
       data <- fetch_fn()
       saveRDS(data, file.path(dir, filename))
-      message("Loaded live data: ", fallback_name)
+      cli::cli_progress_step("Loaded live data: ", fallback_name)
     },
     error = function(e) {
-      warning("Failed to fetch ", fallback_name, ". Using internal fallback.")
-      use_internal_data(fallback_name, filename)
+      if (force) {
+        cli::cli_abort(
+          "Failed to fetch {fallback_name}. Use `force = FALSE` to use fallback data."
+        )
+      }
+
+      cli::cli_warn(
+        "Failed to fetch {fallback_name}. Using internal fallback."
+      )
+      use_internal_data(fallback_name, filename, dir = dir)
     }
   )
 }
 
 
-use_internal_data <- function(fallback_name, filename) {
-  dir <- file.path(tempdir(), "costDeflateR_data")
+use_internal_data <- function(fallback_name, filename, dir) {
   if (!dir.exists(dir)) {
     dir.create(dir, recursive = TRUE)
   }
@@ -110,21 +141,28 @@ get_temp_data_dir <- function() {
 #' @param pppex_src A `character`, which dataset should PPP values come from? IMF or OECD?
 #' @param use_live_data A `logical`. Makes call to `update_internal_data()`, if current IMF or OECD are more than a week old then make an API call to replace them., default = `TRUE`
 #' @param force_live_data A `logical`. Makes call to `update_internal_data()` regardless of age of data currently stored. Use only if you know IMF WEO or OECD data has been updated since you last ran
-get_data <- function(pppex_src, use_live_data, force_live_data) {
+#' @param dir A `character`. The directory to store the live data. If missing, uses a temp directory.
+get_data <- function(pppex_src, use_live_data, force_live_data, dir) {
   # deal with internal/ live data.
-  dl_imfppp <- dl_oecdppp <- FALSE
+  # dl_imfppp <- dl_oecdppp <- FALSE
 
-  if (pppex_src == "IMF") {
-    dl_imfppp <- TRUE
-  }
-  if (pppex_src == "OECD") {
-    dl_oecdppp <- TRUE
-  }
+  dl_imfppp <- pppex_src == "IMF"
+  dl_oecdppp <- pppex_src == "OECD"
+
   # get live data, store temp.
   if (use_live_data) {
-    message("Attempting to use live data from IMF/ OECD")
-    cond_update_internal_data(force_live_data, dl_oecdppp, dl_imfppp)
-    dir <- get_temp_data_dir()
+    if (missing(dir)) {
+      dir <- get_temp_data_dir()
+    }
+
+    cli::cli_progress_step("Attempting to use live data from IMF/ OECD")
+    cond_update_internal_data(
+      dir = dir,
+      force = force_live_data,
+      dl_oecdppp = dl_oecdppp,
+      dl_imfppp = dl_imfppp
+    )
+
     if (dl_oecdppp == TRUE) {
       oecd_ppp <- readRDS(file.path(dir, "oecd_ppp.rds"))
     }
@@ -136,17 +174,15 @@ get_data <- function(pppex_src, use_live_data, force_live_data) {
     }
   } else {
     # else revert to old (can already call from internal data)
-    message(paste0(
-      "Using internal data. Last updated: ",
-      format(
-        as.POSIXct(
-          as.numeric(update_meta["updated_at"]),
-          origin = "1970-01-01",
-          tz = "UTC"
-        ),
-        "%Y-%m-%d %H:%M:%S %Z"
-      )
-    ))
+    last_updated <- format(
+      as.POSIXct(
+        as.numeric(update_meta["updated_at"]),
+        origin = "1970-01-01",
+        tz = "UTC"
+      ),
+      "%Y-%m-%d %H:%M:%S %Z"
+    )
+    cli::cli_progress_step("Using internal data. Last updated: {last_updated}")
   }
 
   # point data to correct dataset.
@@ -159,17 +195,14 @@ get_data <- function(pppex_src, use_live_data, force_live_data) {
       dplyr::select(country = COUNTRY, year = TIME_PERIOD, value = PPP)
   }
 
-  if (TRUE) {
-    gdpd_vals <- imf_gdpd |>
-      dplyr::select(country = COUNTRY, year = TIME_PERIOD, value = NGDP_D)
-  }
+  gdpd_vals <- imf_gdpd |>
+    dplyr::select(country = COUNTRY, year = TIME_PERIOD, value = NGDP_D)
 
   # country combs for later
-  tbl <- ppp_vals |>
+  ppp_vals |>
     dplyr::inner_join(
       gdpd_vals,
       dplyr::join_by(country, year),
       suffix = c("_pppex", "_gdpd")
     )
-  return(tbl)
 }

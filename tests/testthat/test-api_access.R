@@ -1,40 +1,8 @@
-# with_mock_api({
-#   test_that("get_oecd_ppp returns expected structure", {
-#     data <- get_oecd_ppp()
-#     expect_s3_class(data, "data.frame")
-#     expect_true(all(c("COUNTRY", "TIME_PERIOD", "PPP") %in% names(data)))
-#     expect_type(data$TIME_PERIOD, "double")
-#   })
-#
-#
-#   # test_that("get_imf returns expected structure", {
-#   #   key <- "*.NGDP_D.*"
-#   #   data <- get_imf(key)
-#   #   expect_s3_class(data, "data.frame")
-#   #   expect_true("TIME_PERIOD" %in% names(data))
-#   #   expect_type(data$TIME_PERIOD, "double")
-#   # })
-#
-#   test_that("get_imf_gdpd returns expected structure", {
-#     data <- get_imf_gdpd()
-#     expect_s3_class(data, "data.frame")
-#     expect_true(all(c("COUNTRY", "TIME_PERIOD", "NGDP_D") %in% names(data)))
-#     expect_type(data$TIME_PERIOD, "double")
-#   })
-#
-#   test_that("get_imf_ppp returns expected structure", {
-#     data <- get_imf_ppp()
-#     expect_s3_class(data, "data.frame")
-#     expect_true(all(c("COUNTRY", "TIME_PERIOD", "PPPEX") %in% names(data)))
-#     expect_type(data$TIME_PERIOD, "double")
-#   })
-# })
-#
-# library(testthat)
-# library(httptest)
-
 with_mock_api({
   test_that("get_oecd_ppp returns expected structure", {
+    skip_if_offline()
+    skip_on_cran()
+
     data <- get_oecd_ppp()
     expect_s3_class(data, "data.frame")
     expect_named(data, c("COUNTRY", "TIME_PERIOD", "PPP"))
@@ -44,6 +12,9 @@ with_mock_api({
   })
 
   test_that("get_imf_gdpd returns expected structure", {
+    skip_if_offline()
+    skip_on_cran()
+
     data <- get_imf_gdpd()
     expect_s3_class(data, "data.frame")
     expect_named(data, c("COUNTRY", "TIME_PERIOD", "NGDP_D"))
@@ -52,6 +23,9 @@ with_mock_api({
   })
 
   test_that("get_imf_ppp returns expected structure", {
+    skip_if_offline()
+    skip_on_cran()
+
     data <- get_imf_ppp()
     expect_s3_class(data, "data.frame")
     expect_named(data, c("COUNTRY", "TIME_PERIOD", "PPPEX"))
@@ -59,4 +33,11 @@ with_mock_api({
     expect_type(data$PPPEX, "double")
     expect_true(all(!is.na(data$PPPEX)))
   })
+})
+
+test_that("fails without internet", {
+  local_mocked_bindings(is_internet_down = function(...) TRUE)
+  expect_error(get_oecd_ppp(), "Check your internet")
+  expect_error(get_imf_gdpd(), "Check your internet")
+  expect_error(get_imf_ppp(), "Check your internet")
 })

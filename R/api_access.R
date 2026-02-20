@@ -12,6 +12,7 @@
 #' @usage NULL
 #'
 get_oecd_ppp <- function() {
+  check_internet()
   url <- paste0(
     "https://sdmx.oecd.org/public/rest/data/",
     "OECD.SDD.NAD,DSD_NAMAIN10@DF_TABLE4,1.0/",
@@ -24,16 +25,14 @@ get_oecd_ppp <- function() {
 
   tryCatch(
     {
-      data <- rsdmx::readSDMX(url) |>
+      rsdmx::readSDMX(url) |>
         as.data.frame(data) |>
         dplyr::select(COUNTRY = REF_AREA, TIME_PERIOD, PPP = obsValue) |>
         dplyr::mutate(TIME_PERIOD = as.numeric(TIME_PERIOD))
-
-      return(data)
     },
     error = function(e) {
-      warning("Failed to fetch OECD PPP data: ", conditionMessage(e))
-      return(NULL)
+      cli::cli_warn("Failed to fetch OECD PPP data: {conditionMessage(e)}")
+      NULL
     }
   )
 }
@@ -50,9 +49,10 @@ get_oecd_ppp <- function() {
 #'
 #' @usage NULL
 get_imf <- function(key) {
+  check_internet()
   tryCatch(
     {
-      data <- as.data.frame(rsdmx::readSDMX(
+      as.data.frame(rsdmx::readSDMX(
         providerId = "IMF_DATA",
         resource = "data",
         flowRef = "IMF.RES,WEO",
@@ -62,11 +62,10 @@ get_imf <- function(key) {
           TIME_PERIOD = as.numeric(TIME_PERIOD),
           OBS_VALUE = as.numeric(OBS_VALUE)
         )
-      return(data)
     },
     error = function(e) {
-      warning("Failed to fetch IMF data: ", conditionMessage(e))
-      return(NULL)
+      cli::cli_warn("Failed to fetch IMF data: {conditionMessage(e)}")
+      NULL
     }
   )
 }

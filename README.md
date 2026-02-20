@@ -67,14 +67,11 @@ print(deflated_data)
 ### Using Constant Values
 
 ``` r
-data <- data.frame(cost_base = c(100, 200))
-
 deflated_data <- deflate(
-  input_data = data,
-  cost_base = "cost_base",
-  year_base = "2010",
+  cost_base = c(100, 200),
+  year_base = 2010,
   country_base = "Australia",
-  year_target = "2020",
+  year_target = 2020,
   country_target = "United States",
   rename_countries = TRUE
 )

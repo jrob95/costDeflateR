@@ -4,7 +4,7 @@
 \alias{get_data}
 \title{Get data}
 \usage{
-get_data(pppex_src, use_live_data, force_live_data)
+get_data(pppex_src, use_live_data, force_live_data, dir)
 }
 \arguments{
 \item{pppex_src}{A `character`, which dataset should PPP values come from? IMF or OECD?}
@@ -12,6 +12,8 @@ get_data(pppex_src, use_live_data, force_live_data)
 \item{use_live_data}{A `logical`. Makes call to `update_internal_data()`, if current IMF or OECD are more than a week old then make an API call to replace them., default = `TRUE`}
 
 \item{force_live_data}{A `logical`. Makes call to `update_internal_data()` regardless of age of data currently stored. Use only if you know IMF WEO or OECD data has been updated since you last ran}
+
+\item{dir}{A `character`. The directory to store the live data. If missing, uses a temp directory.}
 }
 \description{
 `get_data` Checks user preference for source of OECD/ IMF PPPEX and GDPD data (internal or live) and loads data accordingly.
