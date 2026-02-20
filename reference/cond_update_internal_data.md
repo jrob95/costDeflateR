@@ -8,6 +8,7 @@ to TRUE.
 
 ``` r
 cond_update_internal_data(
+  dir,
   force = FALSE,
   dl_oecdppp = TRUE,
   dl_imfppp = TRUE,
@@ -16,6 +17,10 @@ cond_update_internal_data(
 ```
 
 ## Arguments
+
+- dir:
+
+  Character. A path to store data. If missing, will use a temp dir.
 
 - force:
 

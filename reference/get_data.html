@@ -38,7 +38,7 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">get_data</span><span class="op">(</span><span class="va">pppex_src</span>, <span class="va">use_live_data</span>, <span class="va">force_live_data</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">get_data</span><span class="op">(</span><span class="va">pppex_src</span>, <span class="va">use_live_data</span>, <span class="va">force_live_data</span>, <span class="va">dir</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -55,6 +55,10 @@
 
 <dt id="arg-force-live-data">force_live_data<a class="anchor" aria-label="anchor" href="#arg-force-live-data"></a></dt>
 <dd><p>A `logical`. Makes call to `update_internal_data()` regardless of age of data currently stored. Use only if you know IMF WEO or OECD data has been updated since you last ran</p></dd>
+
+
+<dt id="arg-dir">dir<a class="anchor" aria-label="anchor" href="#arg-dir"></a></dt>
+<dd><p>A `character`. The directory to store the live data. If missing, uses a temp directory.</p></dd>
 
 </dl></div>
 

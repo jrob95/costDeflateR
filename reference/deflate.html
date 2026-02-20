@@ -46,7 +46,7 @@
 <span>  <span class="va">year_target</span>,</span>
 <span>  country_target <span class="op">=</span> <span class="st">"USA"</span>,</span>
 <span>  cost_target <span class="op">=</span> <span class="st">"cost_target"</span>,</span>
-<span>  pppex_src <span class="op">=</span> <span class="st">"IMF"</span>,</span>
+<span>  pppex_src <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"IMF"</span>, <span class="st">"OECD"</span><span class="op">)</span>,</span>
 <span>  rename_countries <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  use_live_data <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  force_live_data <span class="op">=</span> <span class="cn">FALSE</span></span>
@@ -58,7 +58,7 @@
 
 
 <dl><dt id="arg-input-data">input_data<a class="anchor" aria-label="anchor" href="#arg-input-data"></a></dt>
-<dd><p>A `data.frame` containing the data to be deflated.</p></dd>
+<dd><p>A `data.frame` containing the data to be deflated. Can be missing if values (or vectors of values) are specified for the cost, year and country base and targets.</p></dd>
 
 
 <dt id="arg-cost-base">cost_base<a class="anchor" aria-label="anchor" href="#arg-cost-base"></a></dt>
@@ -132,30 +132,41 @@ or provide constant values to apply across all rows.</p>
 <span class="r-in"><span>  year_target <span class="op">=</span> <span class="st">"year_target"</span>,</span></span>
 <span class="r-in"><span>  country_target <span class="op">=</span> <span class="st">"country_target"</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Attempting to use live data from IMF/ OECD</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Updating IMF PPP data...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Attempting to use live data from IMF/ OECD</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Updating IMF PPP data...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [rsdmx][INFO] Fetching 'https://api.imf.org/external/sdmx/2.1/data/IMF.RES,WEO/*.PPPEX.*/all/' </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Loaded live data: imf_ppp</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Updating IMF GDPD data...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Loaded live data: </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> imf_ppp <span style="color: #B2B2B2;">[6ms]</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Updating IMF PPP data...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Updating IMF PPP data... <span style="color: #B2B2B2;">[4.2s]</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Attempting to use live data from IMF/ OECD</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Updating IMF GDPD data...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [rsdmx][INFO] Fetching 'https://api.imf.org/external/sdmx/2.1/data/IMF.RES,WEO/*.NGDP_D.*/all/' </span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Loaded live data: imf_gdpd</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Loaded live data: </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> imf_gdpd <span style="color: #B2B2B2;">[7ms]</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Updating IMF GDPD data...</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Updating IMF GDPD data... <span style="color: #B2B2B2;">[3.8s]</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Attempting to use live data from IMF/ OECD</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Attempting to use live data from IMF/ OECD <span style="color: #B2B2B2;">[8.1s]</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># You can also also specify values in the function for year and country</span></span></span>
-<span class="r-in"><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>  cost_base <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">100</span>, <span class="fl">200</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Example 2: Using constant values for base and target</span></span></span>
 <span class="r-in"><span><span class="va">deflated_data</span> <span class="op">&lt;-</span> <span class="fu">deflate</span><span class="op">(</span></span></span>
-<span class="r-in"><span>  input_data <span class="op">=</span> <span class="va">data</span>,</span></span>
-<span class="r-in"><span>  cost_base <span class="op">=</span> <span class="st">"cost_base"</span>,</span></span>
+<span class="r-in"><span>  cost_base <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">100</span>, <span class="fl">200</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  year_base <span class="op">=</span> <span class="st">"2010"</span>,</span></span>
 <span class="r-in"><span>  country_base <span class="op">=</span> <span class="st">"Australia"</span>,</span></span>
 <span class="r-in"><span>  year_target <span class="op">=</span> <span class="st">"2020"</span>,</span></span>
 <span class="r-in"><span>  country_target <span class="op">=</span> <span class="st">"United States"</span>,</span></span>
 <span class="r-in"><span>  rename_countries <span class="op">=</span> <span class="cn">TRUE</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Attempting to use live data from IMF/ OECD</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Attempting to use live data from IMF/ OECD</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BB00;">✔</span> Attempting to use live data from IMF/ OECD <span style="color: #B2B2B2;">[16ms]</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

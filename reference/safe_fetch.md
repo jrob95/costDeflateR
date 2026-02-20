@@ -6,7 +6,7 @@ directory. Falls back to internal data if download fails.
 ## Usage
 
 ``` r
-safe_fetch(fetch_fn, fallback_name, filename, dir)
+safe_fetch(fetch_fn, fallback_name, filename, dir, force)
 ```
 
 ## Arguments
@@ -26,6 +26,10 @@ safe_fetch(fetch_fn, fallback_name, filename, dir)
 - dir:
 
   character string contain temp directory path.
+
+- force:
+
+  Logical. If TRUE, forces the update regardless of data age.
 
 ## Value
 

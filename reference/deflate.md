@@ -14,7 +14,7 @@ deflate(
   year_target,
   country_target = "USA",
   cost_target = "cost_target",
-  pppex_src = "IMF",
+  pppex_src = c("IMF", "OECD"),
   rename_countries = TRUE,
   use_live_data = TRUE,
   force_live_data = FALSE
@@ -25,7 +25,9 @@ deflate(
 
 - input_data:
 
-  A \`data.frame\` containing the data to be deflated.
+  A \`data.frame\` containing the data to be deflated. Can be missing if
+  values (or vectors of values) are specified for the cost, year and
+  country base and targets.
 
 - cost_base:
 
@@ -110,28 +112,39 @@ deflated_data <- deflate(
   year_target = "year_target",
   country_target = "country_target"
 )
-#> Attempting to use live data from IMF/ OECD
-#> Updating IMF PPP data...
+#> ℹ Attempting to use live data from IMF/ OECD
+#> ℹ Updating IMF PPP data...
 #> [rsdmx][INFO] Fetching 'https://api.imf.org/external/sdmx/2.1/data/IMF.RES,WEO/*.PPPEX.*/all/' 
-#> Loaded live data: imf_ppp
-#> Updating IMF GDPD data...
+#> ℹ Loaded live data: 
+#> ✔ imf_ppp [6ms]
+#> 
+#> ℹ Updating IMF PPP data...
+#> ✔ Updating IMF PPP data... [4.2s]
+#> 
+#> ℹ Attempting to use live data from IMF/ OECD
+#> ℹ Updating IMF GDPD data...
 #> [rsdmx][INFO] Fetching 'https://api.imf.org/external/sdmx/2.1/data/IMF.RES,WEO/*.NGDP_D.*/all/' 
-#> Loaded live data: imf_gdpd
+#> ℹ Loaded live data: 
+#> ✔ imf_gdpd [7ms]
+#> 
+#> ℹ Updating IMF GDPD data...
+#> ✔ Updating IMF GDPD data... [3.8s]
+#> 
+#> ℹ Attempting to use live data from IMF/ OECD
+#> ✔ Attempting to use live data from IMF/ OECD [8.1s]
+#> 
 
 # You can also also specify values in the function for year and country
-data <- data.frame(
-  cost_base = c(100, 200)
-)
-
 # Example 2: Using constant values for base and target
 deflated_data <- deflate(
-  input_data = data,
-  cost_base = "cost_base",
+  cost_base = c(100, 200),
   year_base = "2010",
   country_base = "Australia",
   year_target = "2020",
   country_target = "United States",
   rename_countries = TRUE
 )
-#> Attempting to use live data from IMF/ OECD
+#> ℹ Attempting to use live data from IMF/ OECD
+#> ✔ Attempting to use live data from IMF/ OECD [16ms]
+#> 
 ```

@@ -6,7 +6,7 @@ GDPD data (internal or live) and loads data accordingly.
 ## Usage
 
 ``` r
-get_data(pppex_src, use_live_data, force_live_data)
+get_data(pppex_src, use_live_data, force_live_data, dir)
 ```
 
 ## Arguments
@@ -27,3 +27,8 @@ get_data(pppex_src, use_live_data, force_live_data)
   A \`logical\`. Makes call to \`update_internal_data()\` regardless of
   age of data currently stored. Use only if you know IMF WEO or OECD
   data has been updated since you last ran
+
+- dir:
+
+  A \`character\`. The directory to store the live data. If missing,
+  uses a temp directory.

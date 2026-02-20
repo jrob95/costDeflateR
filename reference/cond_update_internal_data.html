@@ -42,6 +42,7 @@ that are missing or older than 7 days, or if `force` is set to TRUE.</p>
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">cond_update_internal_data</span><span class="op">(</span></span>
+<span>  <span class="va">dir</span>,</span>
 <span>  force <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  dl_oecdppp <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  dl_imfppp <span class="op">=</span> <span class="cn">TRUE</span>,</span>
@@ -53,7 +54,11 @@ that are missing or older than 7 days, or if `force` is set to TRUE.</p>
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
 
 
-<dl><dt id="arg-force">force<a class="anchor" aria-label="anchor" href="#arg-force"></a></dt>
+<dl><dt id="arg-dir">dir<a class="anchor" aria-label="anchor" href="#arg-dir"></a></dt>
+<dd><p>Character. A path to store data. If missing, will use a temp dir.</p></dd>
+
+
+<dt id="arg-force">force<a class="anchor" aria-label="anchor" href="#arg-force"></a></dt>
 <dd><p>Logical. If TRUE, forces the update regardless of data age.</p></dd>
 
 
